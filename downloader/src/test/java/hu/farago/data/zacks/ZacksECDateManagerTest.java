@@ -8,12 +8,12 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertNotNull;
 
 import hu.farago.data.AbstractRootTest;
-import hu.farago.data.model.dao.mongo.ZacksEarningsCallDatesRepository;
-import hu.farago.data.model.entity.mongo.EarningsCall;
-import hu.farago.data.model.entity.mongo.ZacksEarningsCallDates;
 import hu.farago.data.seekingalpha.ProcessFirstNArticleParameter;
 import hu.farago.data.seekingalpha.SeekingAlphaDownloader;
 import hu.farago.data.zacks.ZacksECDateManager.ManagerParameterObject;
+import hu.farago.repo.model.dao.mongo.ZacksEarningsCallDatesRepository;
+import hu.farago.repo.model.entity.mongo.EarningsCall;
+import hu.farago.repo.model.entity.mongo.ZacksEarningsCallDates;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package hu.farago.data.nasdaq;
 
-import hu.farago.data.model.entity.mongo.ShortInterest;
 import hu.farago.data.utils.URLUtils;
+import hu.farago.repo.model.entity.mongo.ShortInterest;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

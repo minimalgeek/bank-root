@@ -1,7 +1,7 @@
 package hu.farago.data.macroman;
 
 import hu.farago.data.AbstractRootTest;
-import hu.farago.data.model.dao.mongo.MacroManRepository;
+import hu.farago.repo.model.dao.mongo.MacroManRepository;
 
 import org.junit.Assert;
 import org.junit.Test;

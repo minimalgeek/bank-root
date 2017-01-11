@@ -12,10 +12,10 @@ import com.google.common.collect.Lists;
 
 import hu.farago.data.edgar.Edgar10KDownloader;
 import hu.farago.data.edgar.EdgarDownloader;
-import hu.farago.data.model.dao.mongo.Edgar10KDataRepository;
-import hu.farago.data.model.dao.mongo.EdgarDataRepository;
-import hu.farago.data.model.entity.mongo.Edgar10QData;
-import hu.farago.data.model.entity.mongo.EdgarData;
+import hu.farago.repo.model.dao.mongo.Edgar10KDataRepository;
+import hu.farago.repo.model.dao.mongo.EdgarDataRepository;
+import hu.farago.repo.model.entity.mongo.Edgar10QData;
+import hu.farago.repo.model.entity.mongo.EdgarData;
 
 @Controller
 public class EdgarDownloadService {

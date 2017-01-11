@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.google.common.collect.Iterables;
 
 import hu.farago.data.AbstractRootTest;
-import hu.farago.data.model.dao.mongo.ForexRepository;
-import hu.farago.data.model.entity.mongo.Forex;
-import hu.farago.data.model.entity.mongo.QForex;
+import hu.farago.repo.model.dao.mongo.ForexRepository;
+import hu.farago.repo.model.entity.mongo.Forex;
+import hu.farago.repo.model.entity.mongo.QForex;
 
 public class ForexRepositoryTest extends AbstractRootTest {
 

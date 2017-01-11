@@ -17,12 +17,12 @@ import com.google.common.collect.Lists;
 import hu.farago.data.api.ForexDataDownloader;
 import hu.farago.data.api.dto.ForexData;
 import hu.farago.data.api.dto.HistoricalForexData;
-import hu.farago.data.model.dao.mongo.ForexRepository;
-import hu.farago.data.model.entity.mongo.AutomaticServiceError.AutomaticService;
-import hu.farago.data.model.entity.mongo.Forex;
-import hu.farago.data.model.entity.mongo.QForex;
 import hu.farago.data.utils.AutomaticServiceErrorUtils;
 import hu.farago.data.yahoo.YahooCurrencyPairDownloader;
+import hu.farago.repo.model.dao.mongo.ForexRepository;
+import hu.farago.repo.model.entity.mongo.AutomaticServiceError.AutomaticService;
+import hu.farago.repo.model.entity.mongo.Forex;
+import hu.farago.repo.model.entity.mongo.QForex;
 
 @Controller
 public class ForexDataDownloaderService {

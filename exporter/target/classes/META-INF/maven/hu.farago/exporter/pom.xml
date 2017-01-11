@@ -12,8 +12,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
+			<groupId>hu.farago</groupId>
+			<artifactId>repository</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -32,12 +33,4 @@
 			<artifactId>guava</artifactId>
 		</dependency>
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 </project>

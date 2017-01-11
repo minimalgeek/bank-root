@@ -1,8 +1,5 @@
 package hu.farago.data.seekingalpha;
 
-import hu.farago.data.model.entity.mongo.EarningsCall;
-import hu.farago.data.seekingalpha.dto.StockData;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import hu.farago.repo.model.entity.mongo.EarningsCall;
+import hu.farago.repo.model.entity.mongo.embedded.StockData;
 import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
 import yahoofinance.histquotes.HistoricalQuote;

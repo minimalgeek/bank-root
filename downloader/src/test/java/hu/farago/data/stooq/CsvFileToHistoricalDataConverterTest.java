@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import hu.farago.data.AbstractRootTest;
 import hu.farago.data.api.dto.HistoricalForexData;
 import hu.farago.data.stooq.CsvFileToHistoricalDataConverter;
-import hu.farago.data.utils.DateTimeUtils;
+import hu.farago.repo.utils.DateTimeUtils;
 
 import java.io.File;
 import java.io.IOException;

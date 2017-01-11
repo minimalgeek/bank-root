@@ -2,7 +2,7 @@ package hu.farago.data.seekingalpha;
 
 
 import hu.farago.data.AbstractRootTest;
-import hu.farago.data.model.entity.mongo.EarningsCall;
+import hu.farago.repo.model.entity.mongo.EarningsCall;
 
 import static org.junit.Assert.*;
 

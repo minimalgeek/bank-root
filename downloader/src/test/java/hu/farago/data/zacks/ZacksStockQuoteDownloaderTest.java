@@ -3,7 +3,7 @@ package hu.farago.data.zacks;
 import java.util.List;
 
 import hu.farago.data.AbstractRootTest;
-import hu.farago.data.model.entity.mongo.ZacksEarningsCallDates2;
+import hu.farago.repo.model.entity.mongo.ZacksEarningsCallDates2;
 
 import org.junit.Assert;
 import org.junit.Test;

@@ -18,10 +18,10 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.Lists;
 
 import hu.farago.data.api.WordProcessor;
-import hu.farago.data.model.dao.mongo.EarningsCallRepository;
-import hu.farago.data.model.entity.mongo.EarningsCall;
 import hu.farago.data.seekingalpha.ToneCalculator;
-import hu.farago.data.utils.DateTimeUtils;
+import hu.farago.repo.model.dao.mongo.EarningsCallRepository;
+import hu.farago.repo.model.entity.mongo.EarningsCall;
+import hu.farago.repo.utils.DateTimeUtils;
 
 @Component
 public class EarningsCallFileImporter {

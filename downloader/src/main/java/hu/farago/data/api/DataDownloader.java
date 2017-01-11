@@ -1,7 +1,5 @@
 package hu.farago.data.api;
 
-import hu.farago.data.utils.URLUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -19,6 +17,8 @@ import org.xml.sax.SAXException;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
+import hu.farago.data.utils.URLUtils;
 
 public abstract class DataDownloader<T> {
 

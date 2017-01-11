@@ -8,6 +8,9 @@
         <dependent-module archiveName="downloader-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/downloader/downloader">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="repository-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/repository/repository">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module archiveName="exporter-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/exporter/exporter">
             <dependency-type>uses</dependency-type>
         </dependent-module>

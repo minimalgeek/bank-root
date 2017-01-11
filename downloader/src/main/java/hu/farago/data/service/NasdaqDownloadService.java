@@ -13,15 +13,15 @@ import org.xml.sax.SAXException;
 
 import com.google.common.collect.Sets;
 
-import hu.farago.data.model.dao.mongo.IPOActivityRepository;
-import hu.farago.data.model.dao.mongo.ShortInterestRepository;
-import hu.farago.data.model.entity.mongo.IPOActivity;
-import hu.farago.data.model.entity.mongo.ShortInterest;
 import hu.farago.data.nasdaq.CompanyListDownloader;
 import hu.farago.data.nasdaq.Exchange;
 import hu.farago.data.nasdaq.HistoricalShortInterestLoader;
 import hu.farago.data.nasdaq.IPODownloader;
 import hu.farago.data.nasdaq.ShortInterestDownloader;
+import hu.farago.repo.model.dao.mongo.IPOActivityRepository;
+import hu.farago.repo.model.dao.mongo.ShortInterestRepository;
+import hu.farago.repo.model.entity.mongo.IPOActivity;
+import hu.farago.repo.model.entity.mongo.ShortInterest;
 
 @Controller
 public class NasdaqDownloadService {

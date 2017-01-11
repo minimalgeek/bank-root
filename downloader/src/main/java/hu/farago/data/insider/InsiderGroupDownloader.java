@@ -22,11 +22,11 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import hu.farago.data.api.DataDownloader;
-import hu.farago.data.model.entity.mongo.InsiderDataGroup;
-import hu.farago.data.model.entity.mongo.InsiderDataGroup.OwnerRelationShip;
-import hu.farago.data.model.entity.mongo.embedded.FormData;
-import hu.farago.data.utils.DateTimeUtils;
 import hu.farago.data.utils.URLUtils;
+import hu.farago.repo.model.entity.mongo.InsiderDataGroup;
+import hu.farago.repo.model.entity.mongo.InsiderDataGroup.OwnerRelationShip;
+import hu.farago.repo.model.entity.mongo.embedded.FormData;
+import hu.farago.repo.utils.DateTimeUtils;
 
 @Component
 public class InsiderGroupDownloader extends DataDownloader<InsiderDataGroup> {

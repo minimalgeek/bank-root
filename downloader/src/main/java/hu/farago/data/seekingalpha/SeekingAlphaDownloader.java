@@ -21,11 +21,11 @@ import com.google.common.collect.Lists;
 
 import hu.farago.data.api.DataDownloader;
 import hu.farago.data.api.WordProcessor;
-import hu.farago.data.model.entity.mongo.AutomaticServiceError.AutomaticService;
-import hu.farago.data.model.entity.mongo.EarningsCall;
 import hu.farago.data.utils.AutomaticServiceErrorUtils;
-import hu.farago.data.utils.DateTimeUtils;
 import hu.farago.data.utils.URLUtils;
+import hu.farago.repo.model.entity.mongo.EarningsCall;
+import hu.farago.repo.model.entity.mongo.AutomaticServiceError.AutomaticService;
+import hu.farago.repo.utils.DateTimeUtils;
 
 @Component
 public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {

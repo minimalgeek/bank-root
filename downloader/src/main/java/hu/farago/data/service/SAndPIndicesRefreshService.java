@@ -9,16 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
-import hu.farago.data.model.dao.mongo.SAndPIndexRepository;
-import hu.farago.data.model.entity.mongo.AutomaticServiceError.AutomaticService;
-import hu.farago.data.model.entity.mongo.SAndPIndex;
-import hu.farago.data.model.entity.mongo.embedded.SAndPOperation.SAndPGroup;
 import hu.farago.data.sandp.SAndPFileWriter;
 import hu.farago.data.sandp.SpicePostRequestManager;
 import hu.farago.data.sandp.SpiceToSAndPMapper;
 import hu.farago.data.sandp.dto.CompanyJSON;
 import hu.farago.data.sandp.dto.ResponseJSON;
 import hu.farago.data.utils.AutomaticServiceErrorUtils;
+import hu.farago.repo.model.dao.mongo.SAndPIndexRepository;
+import hu.farago.repo.model.entity.mongo.SAndPIndex;
+import hu.farago.repo.model.entity.mongo.AutomaticServiceError.AutomaticService;
+import hu.farago.repo.model.entity.mongo.embedded.SAndPOperation.SAndPGroup;
 
 @Controller
 public class SAndPIndicesRefreshService {

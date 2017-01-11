@@ -1,7 +1,5 @@
 package hu.farago.data.edgar;
 
-import hu.farago.data.edgar.dto.EdgarXML;
-
 import java.io.File;
 
 import javax.xml.bind.JAXBContext;
@@ -10,6 +8,8 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Component;
+
+import hu.farago.repo.model.entity.mongo.embedded.edgar.EdgarXML;
 
 @Component
 public class XMLToEdgarConverter {

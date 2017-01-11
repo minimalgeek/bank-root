@@ -1,7 +1,7 @@
 package hu.farago.data.zacks;
 
-import hu.farago.data.model.entity.mongo.ZacksEarningsCallDates2;
 import hu.farago.data.utils.URLUtils;
+import hu.farago.repo.model.entity.mongo.ZacksEarningsCallDates2;
 
 import java.io.File;
 import java.io.IOException;

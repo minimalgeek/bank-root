@@ -14,9 +14,9 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 
-import hu.farago.data.model.entity.mongo.InsiderData;
-import hu.farago.data.model.entity.mongo.InsiderData.BuySell;
 import hu.farago.data.utils.URLUtils;
+import hu.farago.repo.model.entity.mongo.InsiderData;
+import hu.farago.repo.model.entity.mongo.InsiderData.BuySell;
 
 @Component
 public class InsiderFileUtils {

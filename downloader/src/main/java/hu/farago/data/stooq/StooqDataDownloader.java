@@ -17,9 +17,9 @@ import org.springframework.stereotype.Component;
 
 import hu.farago.data.api.ForexDataDownloader;
 import hu.farago.data.api.dto.ForexData;
-import hu.farago.data.model.entity.mongo.AutomaticServiceError.AutomaticService;
 import hu.farago.data.utils.AutomaticServiceErrorUtils;
-import hu.farago.data.utils.DateTimeUtils;
+import hu.farago.repo.model.entity.mongo.AutomaticServiceError.AutomaticService;
+import hu.farago.repo.utils.DateTimeUtils;
 
 @Component
 public class StooqDataDownloader implements ForexDataDownloader {

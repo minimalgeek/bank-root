@@ -1,7 +1,7 @@
 package hu.farago.data.oilreport;
 
 import hu.farago.data.AbstractRootTest;
-import hu.farago.data.model.dao.mongo.OilReportRepository;
+import hu.farago.repo.model.dao.mongo.OilReportRepository;
 
 import org.junit.Assert;
 import org.junit.Test;

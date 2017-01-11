@@ -1,8 +1,8 @@
 package hu.farago.data.nasdaq;
 
-import hu.farago.data.model.entity.mongo.IPOActivity;
-import hu.farago.data.utils.DateTimeUtils;
 import hu.farago.data.utils.URLUtils;
+import hu.farago.repo.model.entity.mongo.IPOActivity;
+import hu.farago.repo.utils.DateTimeUtils;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

@@ -1,7 +1,7 @@
 package hu.farago.data.sandp;
 
-import hu.farago.data.model.entity.mongo.embedded.SAndPOperation.SAndPGroup;
 import hu.farago.data.sandp.dto.ResponseJSON;
+import hu.farago.repo.model.entity.mongo.embedded.SAndPOperation.SAndPGroup;
 
 import java.io.IOException;
 import java.util.Map;

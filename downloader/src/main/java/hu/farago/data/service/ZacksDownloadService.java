@@ -16,14 +16,14 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 
-import hu.farago.data.model.dao.mongo.ZacksEarningsCallDates2Repository;
-import hu.farago.data.model.entity.mongo.AutomaticServiceError.AutomaticService;
-import hu.farago.data.model.entity.mongo.ZacksEarningsCallDates2;
 import hu.farago.data.utils.AutomaticServiceErrorUtils;
 import hu.farago.data.utils.URLUtils;
 import hu.farago.data.zacks.ZacksFileUtils;
 import hu.farago.data.zacks.ZacksStockQuoteDownloader;
 import hu.farago.data.zacks.dto.ZacksData;
+import hu.farago.repo.model.dao.mongo.ZacksEarningsCallDates2Repository;
+import hu.farago.repo.model.entity.mongo.ZacksEarningsCallDates2;
+import hu.farago.repo.model.entity.mongo.AutomaticServiceError.AutomaticService;
 
 @Controller
 public class ZacksDownloadService {

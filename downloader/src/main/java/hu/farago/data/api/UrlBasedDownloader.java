@@ -1,7 +1,7 @@
 package hu.farago.data.api;
 
-import hu.farago.data.model.entity.mongo.UrlBasedEntity;
 import hu.farago.data.utils.URLUtils;
+import hu.farago.repo.model.entity.mongo.UrlBasedEntity;
 
 import java.math.BigInteger;
 import java.util.List;

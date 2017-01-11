@@ -24,9 +24,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import hu.farago.data.api.DataDownloader;
-import hu.farago.data.edgar.dto.EdgarXML;
-import hu.farago.data.model.entity.mongo.EdgarData;
 import hu.farago.data.utils.URLUtils;
+import hu.farago.repo.model.entity.mongo.EdgarData;
+import hu.farago.repo.model.entity.mongo.embedded.edgar.EdgarXML;
 
 @Component
 public class EdgarDownloader extends DataDownloader<EdgarData> {

@@ -1,10 +1,10 @@
 package hu.farago.data.sandp;
 
 import hu.farago.data.AbstractRootTest;
-import hu.farago.data.model.entity.mongo.SAndPIndex;
-import hu.farago.data.model.entity.mongo.embedded.SAndPOperation;
-import hu.farago.data.model.entity.mongo.embedded.SAndPOperation.Event;
-import hu.farago.data.model.entity.mongo.embedded.SAndPOperation.SAndPGroup;
+import hu.farago.repo.model.entity.mongo.SAndPIndex;
+import hu.farago.repo.model.entity.mongo.embedded.SAndPOperation;
+import hu.farago.repo.model.entity.mongo.embedded.SAndPOperation.Event;
+import hu.farago.repo.model.entity.mongo.embedded.SAndPOperation.SAndPGroup;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;

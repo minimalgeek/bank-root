@@ -13,10 +13,10 @@ import com.google.common.collect.Lists;
 import hu.farago.data.insider.InsiderDownloader;
 import hu.farago.data.insider.InsiderFileUtils;
 import hu.farago.data.insider.InsiderGroupDownloader;
-import hu.farago.data.model.dao.mongo.InsiderDataGroupRepository;
-import hu.farago.data.model.dao.mongo.InsiderDataRepository;
-import hu.farago.data.model.entity.mongo.InsiderData;
-import hu.farago.data.model.entity.mongo.InsiderDataGroup;
+import hu.farago.repo.model.dao.mongo.InsiderDataGroupRepository;
+import hu.farago.repo.model.dao.mongo.InsiderDataRepository;
+import hu.farago.repo.model.entity.mongo.InsiderData;
+import hu.farago.repo.model.entity.mongo.InsiderDataGroup;
 
 /**
  * It's functionality is implemented by {@link EdgarDownloadService}

@@ -21,14 +21,14 @@ import com.google.common.collect.Lists;
 import edu.ucla.sspace.text.IteratorFactory;
 import hu.farago.data.api.UrlBasedDownloader;
 import hu.farago.data.api.WordProcessor;
-import hu.farago.data.model.dao.mongo.MacroManRepository;
-import hu.farago.data.model.entity.mongo.MacroMan;
-import hu.farago.data.model.entity.mongo.embedded.Contributor;
-import hu.farago.data.model.entity.mongo.embedded.ToneWithWords;
 import hu.farago.data.seekingalpha.ToneCalculator;
 import hu.farago.data.semantic.EnglishStemmerWithPatternRemover;
-import hu.farago.data.utils.DateTimeUtils;
 import hu.farago.data.utils.URLUtils;
+import hu.farago.repo.model.dao.mongo.MacroManRepository;
+import hu.farago.repo.model.entity.mongo.MacroMan;
+import hu.farago.repo.model.entity.mongo.embedded.Contributor;
+import hu.farago.repo.model.entity.mongo.embedded.ToneWithWords;
+import hu.farago.repo.utils.DateTimeUtils;
 
 @Component
 public class MacroManDownloader extends UrlBasedDownloader<MacroMan> {

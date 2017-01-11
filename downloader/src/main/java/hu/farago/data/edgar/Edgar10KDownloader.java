@@ -24,8 +24,8 @@ import org.xml.sax.SAXException;
 import com.google.common.collect.Lists;
 
 import hu.farago.data.api.DataDownloader;
-import hu.farago.data.model.entity.mongo.Edgar10QData;
 import hu.farago.data.utils.URLUtils;
+import hu.farago.repo.model.entity.mongo.Edgar10QData;
 
 @Component
 public class Edgar10KDownloader extends DataDownloader<Edgar10QData> {

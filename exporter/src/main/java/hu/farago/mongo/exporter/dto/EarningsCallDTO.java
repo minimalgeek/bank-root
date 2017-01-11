@@ -1,8 +1,8 @@
 package hu.farago.mongo.exporter.dto;
 
-import hu.farago.mongo.model.entity.mongo.EarningsCall;
-
 import org.joda.time.DateTime;
+
+import hu.farago.repo.model.entity.mongo.EarningsCall;
 
 public class EarningsCallDTO {
 

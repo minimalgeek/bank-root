@@ -3,10 +3,10 @@ package hu.farago.data.seekingalpha;
 import static org.junit.Assert.assertThat;
 
 import hu.farago.data.AbstractRootTest;
-import hu.farago.data.model.entity.mongo.EarningsCall;
-import hu.farago.data.model.entity.mongo.InsiderData;
-import hu.farago.data.model.entity.mongo.InsiderData.BuySell;
-import hu.farago.data.model.entity.mongo.InsiderData.OwnerRelationShip;
+import hu.farago.repo.model.entity.mongo.EarningsCall;
+import hu.farago.repo.model.entity.mongo.InsiderData;
+import hu.farago.repo.model.entity.mongo.InsiderData.BuySell;
+import hu.farago.repo.model.entity.mongo.InsiderData.OwnerRelationShip;
 
 import java.util.List;
 

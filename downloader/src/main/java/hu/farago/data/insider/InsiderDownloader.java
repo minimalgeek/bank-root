@@ -18,10 +18,10 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.Lists;
 
 import hu.farago.data.api.DataDownloader;
-import hu.farago.data.model.entity.mongo.InsiderData;
-import hu.farago.data.model.entity.mongo.InsiderData.BuySell;
-import hu.farago.data.model.entity.mongo.InsiderData.OwnerRelationShip;
-import hu.farago.data.utils.DateTimeUtils;
+import hu.farago.repo.model.entity.mongo.InsiderData;
+import hu.farago.repo.model.entity.mongo.InsiderData.BuySell;
+import hu.farago.repo.model.entity.mongo.InsiderData.OwnerRelationShip;
+import hu.farago.repo.utils.DateTimeUtils;
 
 @Component
 public class InsiderDownloader extends DataDownloader<InsiderData> {

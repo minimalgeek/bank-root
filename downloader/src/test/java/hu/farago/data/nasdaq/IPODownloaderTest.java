@@ -1,7 +1,7 @@
 package hu.farago.data.nasdaq;
 
 import hu.farago.data.AbstractRootTest;
-import hu.farago.data.model.entity.mongo.IPOActivity;
+import hu.farago.repo.model.entity.mongo.IPOActivity;
 
 import java.util.List;
 

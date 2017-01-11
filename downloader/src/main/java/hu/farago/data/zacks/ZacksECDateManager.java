@@ -1,13 +1,13 @@
 package hu.farago.data.zacks;
 
-import hu.farago.data.model.dao.mongo.EarningsCallRepository;
-import hu.farago.data.model.dao.mongo.ZacksEarningsCallDatesRepository;
-import hu.farago.data.model.entity.mongo.EarningsCall;
-import hu.farago.data.model.entity.mongo.ZacksEarningsCallDates;
-import hu.farago.data.model.entity.mongo.AutomaticServiceError.AutomaticService;
 import hu.farago.data.seekingalpha.ProcessFirstNArticleParameter;
 import hu.farago.data.seekingalpha.SeekingAlphaDownloader;
 import hu.farago.data.utils.AutomaticServiceErrorUtils;
+import hu.farago.repo.model.dao.mongo.EarningsCallRepository;
+import hu.farago.repo.model.dao.mongo.ZacksEarningsCallDatesRepository;
+import hu.farago.repo.model.entity.mongo.EarningsCall;
+import hu.farago.repo.model.entity.mongo.ZacksEarningsCallDates;
+import hu.farago.repo.model.entity.mongo.AutomaticServiceError.AutomaticService;
 
 import java.util.List;
 

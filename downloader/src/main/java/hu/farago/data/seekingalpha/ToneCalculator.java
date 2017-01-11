@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Maps;
 
-import hu.farago.data.model.dao.mongo.HarvardWordsRepository;
-import hu.farago.data.model.dao.mongo.HenryWordsRepository;
-import hu.farago.data.model.entity.mongo.HarvardWords;
-import hu.farago.data.model.entity.mongo.HenryWords;
-import hu.farago.data.model.entity.mongo.embedded.ToneWithWords;
-import hu.farago.data.seekingalpha.dto.HTone;
-import hu.farago.data.seekingalpha.dto.Tone;
+import hu.farago.repo.model.dao.mongo.HarvardWordsRepository;
+import hu.farago.repo.model.dao.mongo.HenryWordsRepository;
+import hu.farago.repo.model.entity.mongo.HarvardWords;
+import hu.farago.repo.model.entity.mongo.HenryWords;
+import hu.farago.repo.model.entity.mongo.embedded.HTone;
+import hu.farago.repo.model.entity.mongo.embedded.Tone;
+import hu.farago.repo.model.entity.mongo.embedded.ToneWithWords;
 
 @Component
 public class ToneCalculator {

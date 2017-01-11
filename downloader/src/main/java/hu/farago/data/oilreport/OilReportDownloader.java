@@ -19,11 +19,11 @@ import com.google.common.collect.Lists;
 
 import hu.farago.data.api.UrlBasedDownloader;
 import hu.farago.data.api.WordProcessor;
-import hu.farago.data.model.dao.mongo.OilReportRepository;
-import hu.farago.data.model.entity.mongo.OilReport;
 import hu.farago.data.seekingalpha.ToneCalculator;
-import hu.farago.data.seekingalpha.dto.HTone;
-import hu.farago.data.utils.DateTimeUtils;
+import hu.farago.repo.model.dao.mongo.OilReportRepository;
+import hu.farago.repo.model.entity.mongo.OilReport;
+import hu.farago.repo.model.entity.mongo.embedded.HTone;
+import hu.farago.repo.utils.DateTimeUtils;
 
 @Component
 public class OilReportDownloader extends UrlBasedDownloader<OilReport> {

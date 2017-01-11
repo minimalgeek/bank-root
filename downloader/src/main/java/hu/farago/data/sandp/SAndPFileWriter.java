@@ -22,11 +22,11 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import hu.farago.data.model.entity.mongo.SAndPIndex;
-import hu.farago.data.model.entity.mongo.embedded.SAndPOperation;
-import hu.farago.data.model.entity.mongo.embedded.SAndPOperation.Event;
-import hu.farago.data.model.entity.mongo.embedded.SAndPOperation.SAndPGroup;
 import hu.farago.data.utils.URLUtils;
+import hu.farago.repo.model.entity.mongo.SAndPIndex;
+import hu.farago.repo.model.entity.mongo.embedded.SAndPOperation;
+import hu.farago.repo.model.entity.mongo.embedded.SAndPOperation.Event;
+import hu.farago.repo.model.entity.mongo.embedded.SAndPOperation.SAndPGroup;
 
 @Component
 public class SAndPFileWriter {

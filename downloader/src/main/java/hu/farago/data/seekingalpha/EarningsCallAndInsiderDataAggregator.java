@@ -1,10 +1,5 @@
 package hu.farago.data.seekingalpha;
 
-import hu.farago.data.model.entity.mongo.EarningsCall;
-import hu.farago.data.model.entity.mongo.InsiderData;
-import hu.farago.data.model.entity.mongo.InsiderData.BuySell;
-import hu.farago.data.model.entity.mongo.InsiderData.OwnerRelationShip;
-
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +12,11 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
+import hu.farago.repo.model.entity.mongo.EarningsCall;
+import hu.farago.repo.model.entity.mongo.InsiderData;
+import hu.farago.repo.model.entity.mongo.InsiderData.BuySell;
+import hu.farago.repo.model.entity.mongo.InsiderData.OwnerRelationShip;
 
 @Component
 public class EarningsCallAndInsiderDataAggregator {

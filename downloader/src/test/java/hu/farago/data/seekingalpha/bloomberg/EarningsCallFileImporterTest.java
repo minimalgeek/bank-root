@@ -3,7 +3,7 @@ package hu.farago.data.seekingalpha.bloomberg;
 import static org.junit.Assert.*;
 
 import hu.farago.data.AbstractRootTest;
-import hu.farago.data.model.dao.mongo.EarningsCallRepository;
+import hu.farago.repo.model.dao.mongo.EarningsCallRepository;
 
 import org.junit.Before;
 import org.junit.Test;

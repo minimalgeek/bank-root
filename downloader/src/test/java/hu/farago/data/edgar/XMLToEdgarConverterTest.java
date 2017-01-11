@@ -1,9 +1,9 @@
 package hu.farago.data.edgar;
 
 import hu.farago.data.AbstractRootTest;
-import hu.farago.data.edgar.dto.EdgarXML;
-import hu.farago.data.model.dao.mongo.EdgarDataRepository;
-import hu.farago.data.model.entity.mongo.EdgarData;
+import hu.farago.repo.model.dao.mongo.EdgarDataRepository;
+import hu.farago.repo.model.entity.mongo.EdgarData;
+import hu.farago.repo.model.entity.mongo.embedded.edgar.EdgarXML;
 
 import java.io.File;
 import java.net.URL;

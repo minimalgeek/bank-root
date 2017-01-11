@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import hu.farago.data.AbstractRootTest;
-import hu.farago.data.model.entity.mongo.EarningsCall;
+import hu.farago.repo.model.entity.mongo.EarningsCall;
 
 public class SeekingAlphaDownloaderTopNTest extends AbstractRootTest {
 

@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import hu.farago.data.model.dao.mongo.AutomaticServiceErrorRepository;
-import hu.farago.data.model.entity.mongo.AutomaticServiceError;
+import hu.farago.repo.model.dao.mongo.AutomaticServiceErrorRepository;
+import hu.farago.repo.model.entity.mongo.AutomaticServiceError;
 
 @Controller
 public class ServicesService {

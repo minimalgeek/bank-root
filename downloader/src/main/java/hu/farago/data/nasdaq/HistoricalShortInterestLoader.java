@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import hu.farago.data.model.dao.mongo.ShortInterestRepository;
-import hu.farago.data.model.entity.mongo.ShortInterest;
-import hu.farago.data.utils.DateTimeUtils;
+import hu.farago.repo.model.dao.mongo.ShortInterestRepository;
+import hu.farago.repo.model.entity.mongo.ShortInterest;
+import hu.farago.repo.utils.DateTimeUtils;
 
 @Component
 public class HistoricalShortInterestLoader {

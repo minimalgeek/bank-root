@@ -1,11 +1,11 @@
 package hu.farago.data.sandp;
 
-import hu.farago.data.model.entity.mongo.embedded.SAndPOperation.SAndPGroup;
-
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import hu.farago.repo.model.entity.mongo.embedded.SAndPOperation.SAndPGroup;
 
 @Component
 public class SpiceHttpMethodBuilder {

@@ -1,7 +1,7 @@
 package hu.farago.data.edgar;
 
 import hu.farago.data.AbstractRootTest;
-import hu.farago.data.model.entity.mongo.Edgar10QData;
+import hu.farago.repo.model.entity.mongo.Edgar10QData;
 
 import java.io.IOException;
 import java.text.ParseException;

@@ -1,0 +1,4 @@
+hu\farago\mongo\AbstractRootTest.class
+hu\farago\mongo\service\MongoExportServiceTest.class
+hu\farago\mongo\flatten\AggregateRunnerTest.class
+hu\farago\mongo\SpringBootRoot.class

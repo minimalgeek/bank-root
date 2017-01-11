@@ -2,8 +2,8 @@ package hu.farago.data.yahoo;
 
 import hu.farago.data.api.dto.ForexData;
 import hu.farago.data.api.dto.HistoricalForexData;
-import hu.farago.data.model.entity.mongo.AutomaticServiceError.AutomaticService;
 import hu.farago.data.utils.AutomaticServiceErrorUtils;
+import hu.farago.repo.model.entity.mongo.AutomaticServiceError.AutomaticService;
 
 import java.io.IOException;
 

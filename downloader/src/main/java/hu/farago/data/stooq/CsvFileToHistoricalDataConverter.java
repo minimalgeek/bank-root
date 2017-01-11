@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.Lists;
 
 import hu.farago.data.api.dto.HistoricalForexData;
-import hu.farago.data.utils.DateTimeUtils;
+import hu.farago.repo.utils.DateTimeUtils;
 
 @Component
 public class CsvFileToHistoricalDataConverter {

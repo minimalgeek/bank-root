@@ -1,7 +1,7 @@
 package hu.farago.data.nasdaq;
 
 import hu.farago.data.AbstractRootTest;
-import hu.farago.data.model.dao.mongo.ShortInterestRepository;
+import hu.farago.repo.model.dao.mongo.ShortInterestRepository;
 
 import java.io.IOException;
 

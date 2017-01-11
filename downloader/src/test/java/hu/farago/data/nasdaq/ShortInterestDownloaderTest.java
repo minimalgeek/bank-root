@@ -1,7 +1,7 @@
 package hu.farago.data.nasdaq;
 
 import hu.farago.data.AbstractRootTest;
-import hu.farago.data.model.entity.mongo.ShortInterest;
+import hu.farago.repo.model.entity.mongo.ShortInterest;
 
 import java.util.List;
 

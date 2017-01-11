@@ -1,19 +1,16 @@
 package hu.farago.data.seekingalpha;
 
-import hu.farago.data.AbstractRootTest;
-import hu.farago.data.model.dao.mongo.EarningsCallRepository;
-import hu.farago.data.model.entity.mongo.EarningsCall;
-import hu.farago.data.seekingalpha.dto.HTone;
-import hu.farago.data.seekingalpha.dto.Tone;
-
-import java.math.BigInteger;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.Lists;
+
+import hu.farago.data.AbstractRootTest;
+import hu.farago.repo.model.entity.mongo.EarningsCall;
+import hu.farago.repo.model.entity.mongo.embedded.HTone;
+import hu.farago.repo.model.entity.mongo.embedded.Tone;
 
 public class EarningsCallWordCounterTest extends AbstractRootTest {
 

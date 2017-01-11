@@ -12,15 +12,15 @@ import org.springframework.stereotype.Controller;
 
 import com.google.common.collect.Lists;
 
-import hu.farago.data.model.dao.mongo.EarningsCallRepository;
-import hu.farago.data.model.entity.mongo.AutomaticServiceError.AutomaticService;
-import hu.farago.data.model.entity.mongo.EarningsCall;
 import hu.farago.data.seekingalpha.ProcessFirstNArticleParameter;
 import hu.farago.data.seekingalpha.SeekingAlphaDownloader;
 import hu.farago.data.seekingalpha.YahooStockDownloader;
 import hu.farago.data.seekingalpha.bloomberg.EarningsCallFileImporter;
 import hu.farago.data.utils.AutomaticServiceErrorUtils;
 import hu.farago.data.zacks.ZacksECDateManager;
+import hu.farago.repo.model.dao.mongo.EarningsCallRepository;
+import hu.farago.repo.model.entity.mongo.EarningsCall;
+import hu.farago.repo.model.entity.mongo.AutomaticServiceError.AutomaticService;
 
 @Controller
 public class SeekingAlphaDownloadService {
