@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 
+import hu.farago.data.service.dto.URLSuccess;
 import hu.farago.data.utils.AutomaticServiceErrorUtils;
 import hu.farago.data.utils.URLUtils;
 import hu.farago.data.zacks.ZacksFileUtils;
@@ -47,10 +48,10 @@ public class ZacksDownloadService {
 
 //	@RequestMapping(value = "/refreshAllReportDates", method = RequestMethod.GET, produces = {
 //			MediaType.APPLICATION_JSON_VALUE })
-	public List<String> refreshAllReportDates() {
+	public List<URLSuccess> refreshAllReportDates() {
 		LOGGER.info("refreshAllReportDates");
 
-		List<String> refreshedURLs = Lists.newArrayList();
+		List<URLSuccess> refreshedURLs = Lists.newArrayList();
 
 		for (String url : zacksURLList) {
 			try {
@@ -58,9 +59,10 @@ public class ZacksDownloadService {
 				ZacksData zacksData = createZacksDataFromContent(content);
 				zacksFileUtils.writeZacksDataToCSVFiles(zacksData);
 
-				refreshedURLs.add(url);
+				refreshedURLs.add(new URLSuccess(url, true));
 			} catch (Exception ex) {
 				LOGGER.error("Exception happened during URL content open or processing", ex);
+				refreshedURLs.add(new URLSuccess(url, false));
 				aseu.saveError(AutomaticService.ZACKS, ex.getMessage());
 			}
 		}
@@ -70,12 +72,11 @@ public class ZacksDownloadService {
 
 //	@RequestMapping(value = "/downloadAllZECD", method = RequestMethod.GET, produces = {
 //			MediaType.APPLICATION_JSON_VALUE })
-	public List<String> downloadAllZECD() {
+	public List<ZacksEarningsCallDates2> downloadAllZECD() {
 		LOGGER.info("downloadAllZECD");
 
 		try {
 			List<ZacksEarningsCallDates2> list = downloader.downloadAllZECD();
-			List<String> retList = Lists.newArrayList();
 
 			for (ZacksEarningsCallDates2 zecd2 : list) {
 
@@ -87,11 +88,10 @@ public class ZacksDownloadService {
 						}
 					}
 					repository.save(zecd2);
-					retList.add(zecd2.toString());
 				}
 			}
 
-			return retList;
+			return list;
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			aseu.saveError(AutomaticService.ZACKS, e.getMessage());

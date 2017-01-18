@@ -7,6 +7,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "zacks_earnings_call_dates_ii")
@@ -19,12 +20,21 @@ public class ZacksEarningsCallDates2 implements Serializable {
 	
 	public DateTime nextReportDate;
 	public String tradingSymbol;
-	//public List<DateTime> seekingAlphaCheckDate = Lists.newArrayList();
-	
-	//public BigInteger foundEarningsCallId;
+	@Transient
+	public String url;
+	@Transient
+	public boolean success;
 	
 	public DateTime nextReportDateInLocal() {
 		return nextReportDate.withZone(DateTimeZone.getDefault());
+	}
+	
+	public DateTime getNextReportDate() {
+		return nextReportDate;
+	}
+	
+	public String getUrl() {
+		return url;
 	}
 	
 	@Override

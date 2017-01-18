@@ -77,10 +77,10 @@ public class SeekingAlphaDownloadService {
 
 //	@RequestMapping(value = "/collectEarningsCallsFor/{id}", method = RequestMethod.GET, produces = {
 //			MediaType.APPLICATION_JSON_VALUE })
-	public String collectEarningsCallsFor(String index) {
+	public List<String> collectEarningsCallsFor(String index) {
 		LOGGER.info("collectEarningsCallsFor");
 
-		StringBuilder ret = new StringBuilder();
+		List<String> ret = Lists.newArrayList();
 
 		try {
 			List<EarningsCall> list = seekingAlphaDownloader.collectAllDataForIndex(index);
@@ -90,16 +90,15 @@ public class SeekingAlphaDownloadService {
 			earningsCallRepository.save(list);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			ret.append(e.getMessage());
+			ret.add("Failure: " + e.getMessage());
+			aseu.saveError(AutomaticService.SEEKING_ALPHA, "Error in url: " + ret.toString());
 		}
 
-		if (ret.length() == 0) {
-			ret.append("success");
-		} else {
-			aseu.saveError(AutomaticService.SEEKING_ALPHA, "Error in urls: " + ret.toString());
+		if (ret.size() == 0) {
+			ret.add("Success");
 		}
 
-		return ret.toString();
+		return ret;
 	}
 
 //	@RequestMapping(value = "/processQAndAAndAddStockData", method = RequestMethod.GET, produces = {
