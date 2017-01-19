@@ -32,4 +32,16 @@ public class ShortInterest implements Serializable {
 		
 		return eb.isEquals();
 	}
+	
+	public String getTradingSymbol() {
+		return tradingSymbol;
+	}
+	
+	public DateTime getSettlementDate() {
+		return settlementDate;
+	}
+	
+	public double getShortInterest() {
+		return shortInterest;
+	}
 }

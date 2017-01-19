@@ -6,16 +6,10 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.GridLayout;
 
-import hu.farago.data.service.EdgarDownloadService;
-import hu.farago.data.service.ForexDataDownloaderService;
-import hu.farago.data.service.InsiderTradingDownloadService;
-import hu.farago.data.service.MacroManService;
-import hu.farago.data.service.NasdaqDownloadService;
-import hu.farago.data.service.OilReportService;
-import hu.farago.data.service.SAndPIndicesRefreshService;
 import hu.farago.data.service.SeekingAlphaDownloadService;
-import hu.farago.data.service.ServicesService;
+import hu.farago.data.service.SeekingAlphaDownloadService.EarningsCallView;
 import hu.farago.vaadmin.tab.TabPart;
+import hu.farago.vaadmin.tab.TabPartBasic;
 import hu.farago.vaadmin.tab.TabPartWithInput;
 
 @SpringComponent
@@ -25,57 +19,66 @@ public class SeekingAlphaDownloaderTab extends GridLayout {
 	private static final long serialVersionUID = -4143512087173627823L;
 
 	@Autowired
-	private EdgarDownloadService edgarDownloadService;
-
-	@Autowired
-	private ForexDataDownloaderService forexDataDownloaderService;
-
-	@Autowired
-	private InsiderTradingDownloadService insiderTradingDownloadService;
-
-	@Autowired
-	private MacroManService macroManService;
-
-	@Autowired
-	private NasdaqDownloadService nasdaqDownloadService;
-
-	@Autowired
-	private OilReportService oilReportService;
-
-	@Autowired
-	private SAndPIndicesRefreshService sAndPIndicesRefreshService;
-
-	@Autowired
 	private SeekingAlphaDownloadService seekingAlphaDownloadService;
 
-	@Autowired
-	private ServicesService servicesService;
-
 	public SeekingAlphaDownloaderTab() {
-		super(3, 1);
+		super(3, 2);
 		setSizeFull();
 		setMargin(true);
 		setSpacing(true);
 
-		addComponent(new TabPart<String>(
+		addComponent(new TabPart<EarningsCallView>(
 				"Collect http://seekingalpha.com/ data",
 				() -> seekingAlphaDownloadService.collectEarningsCalls(),
-				"<p>Downloads the earnings call transcripts based on <b>US.tls</b> file"
-						+ "<p>Visits all the ticker's url (e.g.: "
-						+ "<a href=\"http://seekingalpha.com/symbol/AAPL/earnings/transcripts\">http://seekingalpha.com/symbol/AAPL/earnings/transcripts</a>) "
-						+ "and collects all the transcripts from the links presented there</p>"
-						+ "<p>The data will be saved to <b>earnings_call</b> mongo collection</p>",
-				String.class), 
-				0, 0);
+				"<p>Downloads the earnings call transcripts based on <b>US.tls</b> file</p>"
+				+ "<p>Visits all the ticker's url (e.g.: "
+				+ "<a href=\"http://seekingalpha.com/symbol/AAPL/earnings/transcripts\">http://seekingalpha.com/symbol/AAPL/earnings/transcripts</a>) "
+				+ "and collects all the transcripts from the links presented there</p>"
+				+ "<p>The data will be saved to <b>earnings_call</b> mongo collection</p>",
+				EarningsCallView.class), 
+			0, 0);
 
-		addComponent(new TabPartWithInput<String, String>(
+		addComponent(new TabPartWithInput<EarningsCallView, String>(
 				"Collect http://seekingalpha.com/ data",
 				"Trading Symbol: ", 
 				(e) -> seekingAlphaDownloadService.collectEarningsCallsFor(e), 
-				"<p>Downloads the earnings call transcripts for the <b>Trading Symbol</b></p>", 
-				String.class,
+				"<p>Downloads the earnings call transcripts for the <b>Trading Symbol</b></p>"
+				+ "<p>Visits url, like: "
+				+ "<a href=\"http://seekingalpha.com/symbol/AAPL/earnings/transcripts\">http://seekingalpha.com/symbol/AAPL/earnings/transcripts</a> "
+				+ "and collects all the transcripts from the links presented there</p>"
+				+ "<p>The data will be saved to <b>earnings_call</b> mongo collection</p>", 
+				EarningsCallView.class,
 				String.class), 
-				1, 0);
+			1, 0);
 
+		addComponent(new TabPartWithInput<EarningsCallView, Integer>(
+				"Collect http://seekingalpha.com/ data",
+				"Number of fresh transcripts: ", 
+				(e) -> seekingAlphaDownloadService.collectLastNTranscripts(e), 
+				"<p>Downloads the <b>'N' freshest</b> earnings call transcripts based on <b>US.tls</b> file</p>"
+						+ "<p>Visits all the ticker's url (e.g.: "
+						+ "<a href=\"http://seekingalpha.com/symbol/AAPL/earnings/transcripts\">http://seekingalpha.com/symbol/AAPL/earnings/transcripts</a>) "
+						+ "and collects all the transcripts from the links presented there</p>"
+						+ "<p>The data will be saved to <b>earnings_call</b> mongo collection</p>", 
+						EarningsCallView.class,
+				Integer.class), 
+				2, 0);
+		
+		addComponent(new TabPart<EarningsCallView>(
+				"Import all Earning Call files",
+				() -> seekingAlphaDownloadService.importAllFiles(),
+				"<p>Imports all the Earnings Call from <b>c:/DEV/import_all/earnings_call/</b> directory</p>"
+				+ "<p>Filename looks like: <i>AMLN_2002Q4_20030220_1600.txt</i></p>"
+				+ "<p>The data will be saved to <b>earnings_call</b> mongo collection</p>",
+				EarningsCallView.class), 
+			0, 1);
+		
+		addComponent(
+				new TabPartBasic("<h2>SeekingAlpha and Zacks integration</h2>"
+						+ "<h4>Every day, at 00:00</h4>"
+						+ "<p>When we find a future <b>report date</b> on <b>http://zacks.com</b>, we save it to <b>zacks_earnings_call_dates</b></p>"
+						+ "<p>At the same time, it schedules 4 jobs for the following 4 days, "
+						+ "to check arriving Earnings Call Transcripts on <b>http://seekingalpha.com/</b></p>"), 
+				1, 1);
 	}
 }

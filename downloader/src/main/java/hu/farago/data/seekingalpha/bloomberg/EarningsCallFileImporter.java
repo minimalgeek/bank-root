@@ -41,7 +41,7 @@ public class EarningsCallFileImporter {
 	@Autowired
 	private ToneCalculator toneCalculator;
 
-	public void importAll() {
+	public List<EarningsCall> importAll() {
 		List<EarningsCall> ret = Lists.newArrayList();
 
 		Collection<File> files = FileUtils.listFiles(new File(importDirectory),
@@ -58,6 +58,7 @@ public class EarningsCallFileImporter {
 		}
 
 		repository.save(ret);
+		return ret;
 	}
 
 	private EarningsCall createEarningsCall(File file) throws Exception {

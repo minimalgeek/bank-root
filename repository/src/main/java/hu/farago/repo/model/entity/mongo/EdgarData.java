@@ -17,4 +17,12 @@ public class EdgarData {
 	
 	public EdgarXML edgarXML;
 	
+	public String getFormURL() {
+		return formURL;
+	}
+	
+	public String getTradingSymbol() {
+		return tradingSymbol;
+	}
+	
 }

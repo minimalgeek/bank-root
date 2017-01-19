@@ -12,10 +12,12 @@ import com.google.common.collect.Lists;
 
 import hu.farago.data.edgar.Edgar10KDownloader;
 import hu.farago.data.edgar.EdgarDownloader;
+import hu.farago.data.utils.AutomaticServiceErrorUtils;
 import hu.farago.repo.model.dao.mongo.Edgar10KDataRepository;
 import hu.farago.repo.model.dao.mongo.EdgarDataRepository;
 import hu.farago.repo.model.entity.mongo.Edgar10QData;
 import hu.farago.repo.model.entity.mongo.EdgarData;
+import hu.farago.repo.model.entity.mongo.AutomaticServiceError.AutomaticService;
 
 @Controller
 public class EdgarDownloadService {
@@ -33,10 +35,12 @@ public class EdgarDownloadService {
 	@Autowired
 	private Edgar10KDataRepository edgar10KRepository;
 	
-	//@RequestMapping(value = "/collectGroupContent", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public List<String> collectGroupContent() {
+	@Autowired
+	private AutomaticServiceErrorUtils aseu;
+	
+	public List<EdgarData> collectGroupContent() {
 		LOGGER.info("collectGroupContent");
-		List<String> ret = Lists.newArrayList();
+		List<EdgarData> ret = Lists.newArrayList();
 		try {
 			edgarRepository.deleteAll();
 			edgarDownloader.clean();
@@ -45,19 +49,19 @@ public class EdgarDownloadService {
 				
 				for (Map.Entry<String, List<EdgarData>> entry : map.entrySet()) {
 					edgarRepository.save(entry.getValue());
+					ret.addAll(entry.getValue());
 				}
 				
-				ret.addAll(map.keySet());
 			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
+			aseu.saveError(AutomaticService.EDGAR, e.getMessage());
 		}
 		
 		return ret;
 	}
 
-	//@RequestMapping(value = "/collectGroupContentFor/{id}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public String collectGroupContentFor(String index) {
+	public List<EdgarData> collectGroupContentFor(String index) {
 		LOGGER.info("collectGroupContentFor");
 		
 		try {
@@ -67,12 +71,12 @@ public class EdgarDownloadService {
 			// remove older entries
 			edgarRepository.delete(edgarRepository.findByTradingSymbol(index));
 			edgarRepository.save(list);
+			return list;
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			return e.getMessage();
+			aseu.saveError(AutomaticService.EDGAR, e.getMessage());
 		}
-		
-		return "success";
+		return Lists.newArrayList();
 	}
 
 

@@ -7,16 +7,9 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.GridLayout;
 
 import hu.farago.data.service.EdgarDownloadService;
-import hu.farago.data.service.ForexDataDownloaderService;
-import hu.farago.data.service.InsiderTradingDownloadService;
-import hu.farago.data.service.MacroManService;
-import hu.farago.data.service.NasdaqDownloadService;
-import hu.farago.data.service.OilReportService;
-import hu.farago.data.service.SAndPIndicesRefreshService;
-import hu.farago.data.service.SeekingAlphaDownloadService;
-import hu.farago.data.service.ServicesService;
-import hu.farago.data.service.ZacksDownloadService;
+import hu.farago.repo.model.entity.mongo.EdgarData;
 import hu.farago.vaadmin.tab.TabPart;
+import hu.farago.vaadmin.tab.TabPartWithInput;
 
 @SpringComponent
 @UIScope
@@ -27,109 +20,34 @@ public class EdgarDownloaderTab extends GridLayout {
 	@Autowired
 	private EdgarDownloadService edgarDownloadService;
 
-	@Autowired
-	private ForexDataDownloaderService forexDataDownloaderService;
-
-	@Autowired
-	private InsiderTradingDownloadService insiderTradingDownloadService;
-
-	@Autowired
-	private MacroManService macroManService;
-
-	@Autowired
-	private NasdaqDownloadService nasdaqDownloadService;
-
-	@Autowired
-	private OilReportService oilReportService;
-
-	@Autowired
-	private SAndPIndicesRefreshService sAndPIndicesRefreshService;
-
-	@Autowired
-	private SeekingAlphaDownloadService seekingAlphaDownloadService;
-
-	@Autowired
-	private ServicesService servicesService;
-
-	@Autowired
-	private ZacksDownloadService zacksDownloadService;
-
 	public EdgarDownloaderTab() {
 		super(3, 2);
 		setSizeFull();
 		setMargin(true);
 		setSpacing(true);
 
+		addComponent(new TabPart<EdgarData>("Collect http://sec.gov/ Edgar data",
+				() -> edgarDownloadService.collectGroupContent(),
+				"<p>Downloads the Edgar Data (form4, insider trading information) based on <b>US.tls</b> file</p>"
+				+ "<p>Visits all the ticker's urls (e.g.: "
+				+ "<a href=\"https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=AAPL&type=&dateb=&owner=include&start=40&count=40\">www.sec.gov/...</a>) "
+				+ ", iterates over all the pages, iterates over all the links on the pages and collects all the files found there with <i>.xml</i> extension</p>"
+				+ "<p>The data will be saved to <b>edgar_data</b> mongo collection</p>",
+				EdgarData.class), 
+			0, 0);
+
+		addComponent(new TabPartWithInput<EdgarData, String>(
+				"Collect http://sec.gov/ Edgar data",
+				"Trading Symbol: ", 
+				(e) -> edgarDownloadService.collectGroupContentFor(e), 
+				"<p>Downloads the Edgar Data (form4, insider trading information) for the <b>Trading Symbol</b></p>"
+				+ "<p>Visits url, like: "
+				+ "<a href=\"https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=AAPL&type=&dateb=&owner=include&start=40&count=40\">www.sec.gov/...</a> "
+				+ ", iterates over all the pages, then iterates over all the links on the pages and collects all the files found there with <i>.xml</i> extension</p>"
+				+ "<p>The data will be saved to <b>edgar_data</b> mongo collection</p>",
+				EdgarData.class,
+				String.class), 
+			1, 0);
 		
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect http://sec.gov/ Edgar data (form4, insider trading information)", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				0, 1);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect http://sec.gov/ Edgar data (form4, insider trading information) for Trading Symbol", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				1, 1);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect http://seekingalpha.com/ data", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				0, 2);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect http://seekingalpha.com/ data for Trading Symbol", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				1, 2);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect http://seekingalpha.com/ data", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				0, 3);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect http://nasdaq.com/ short interest data", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				1, 3);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect historical short interest data", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				0, 4);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect http://nasdaq.com/ IPO activity", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				1, 4);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect https://iea.org/ oil reports tone", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				0, 5);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect https://macro-man.blogspot.hu/ article and comments tone", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				1, 5);
 	}
 }

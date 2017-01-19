@@ -24,6 +24,7 @@ public class TabPartWithInput<T, S> extends TabPartBasic {
 		buildCommonParts(descriptionText);
 		this.input = new TextField(inputCaption);
 		this.input.setConverter(inputClazz);
+		this.input.setNullRepresentation("");
 		this.button = new Button(buttonCaption, e -> addContentToGrid(call.call((S) this.input.getConvertedValue())));
 		this.button.setStyleName(ValoTheme.BUTTON_PRIMARY);
 		buildGrid(clazz);

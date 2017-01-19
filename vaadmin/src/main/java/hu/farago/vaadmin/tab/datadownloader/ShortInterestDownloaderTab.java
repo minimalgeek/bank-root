@@ -6,16 +6,9 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.GridLayout;
 
-import hu.farago.data.service.EdgarDownloadService;
-import hu.farago.data.service.ForexDataDownloaderService;
-import hu.farago.data.service.InsiderTradingDownloadService;
-import hu.farago.data.service.MacroManService;
 import hu.farago.data.service.NasdaqDownloadService;
-import hu.farago.data.service.OilReportService;
-import hu.farago.data.service.SAndPIndicesRefreshService;
-import hu.farago.data.service.SeekingAlphaDownloadService;
-import hu.farago.data.service.ServicesService;
-import hu.farago.data.service.ZacksDownloadService;
+import hu.farago.repo.model.entity.mongo.IPOActivity;
+import hu.farago.repo.model.entity.mongo.ShortInterest;
 import hu.farago.vaadmin.tab.TabPart;
 
 @SpringComponent
@@ -25,110 +18,50 @@ public class ShortInterestDownloaderTab extends GridLayout {
 	private static final long serialVersionUID = -4143512087173627823L;
 
 	@Autowired
-	private EdgarDownloadService edgarDownloadService;
-
-	@Autowired
-	private ForexDataDownloaderService forexDataDownloaderService;
-
-	@Autowired
-	private InsiderTradingDownloadService insiderTradingDownloadService;
-
-	@Autowired
-	private MacroManService macroManService;
-
-	@Autowired
 	private NasdaqDownloadService nasdaqDownloadService;
 
-	@Autowired
-	private OilReportService oilReportService;
-
-	@Autowired
-	private SAndPIndicesRefreshService sAndPIndicesRefreshService;
-
-	@Autowired
-	private SeekingAlphaDownloadService seekingAlphaDownloadService;
-
-	@Autowired
-	private ServicesService servicesService;
-
-	@Autowired
-	private ZacksDownloadService zacksDownloadService;
-
 	public ShortInterestDownloaderTab() {
-		super(3, 2);
+		super(3, 1);
 		setSizeFull();
 		setMargin(true);
 		setSpacing(true);
 
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect http://sec.gov/ Edgar data (form4, insider trading information)", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				0, 1);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect http://sec.gov/ Edgar data (form4, insider trading information) for Trading Symbol", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				1, 1);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect http://seekingalpha.com/ data", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				0, 2);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect http://seekingalpha.com/ data for Trading Symbol", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				1, 2);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect http://seekingalpha.com/ data", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				0, 3);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect http://nasdaq.com/ short interest data", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				1, 3);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect historical short interest data", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				0, 4);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect http://nasdaq.com/ IPO activity", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				1, 4);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect https://iea.org/ oil reports tone", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				0, 5);
-//		addComponent(
-//				new ButtonDescriptionAndResponsePanel<Double>(
-//					"Collect https://macro-man.blogspot.hu/ article and comments tone", 
-//					(e) -> {}, 
-//					"", 
-//					Double.class), 
-//				1, 5);
+//		nasdaq.shortInterest.urlBase = http://www.nasdaq.com/symbol/
+//			nasdaq.shortInterest.urlEnd = /short-interest
+		
+		addComponent(new TabPart<ShortInterest>(
+				"Collect http://nasdaq.com/ short interest data",
+				() -> nasdaqDownloadService.downloadShortInterestData(),
+				"<p>Downloads the short interests based on the most fresh ticker lists found on "
+				+ "<a href=\"http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=NASDAQ&render=download\">NASDAQ</a>, "
+				+ "<a href=\"http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=NYSE&render=download\">NYSE</a>, "
+				+ "<a href=\"http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=AMEX&render=download\">AMEX</a></p>"
+				+ "<p>Visits all the ticker's url (e.g.: "
+				+ "<a href=\"http://www.nasdaq.com/symbol/AAPL/short-interest\">http://www.nasdaq.com/symbol/AAPL/short-interest</a>) "
+				+ "and collects all the short interest from there</p>"
+				+ "<p>The data will be saved to <b>short_interest</b> mongo collection</p>",
+				ShortInterest.class), 
+			0, 0);
+		
+		addComponent(new TabPart<ShortInterest>(
+				"Collect historical short interest data",
+				() -> nasdaqDownloadService.downloadHistoricalShortInterest(),
+				"<p>Imports the short interests from the csv files under <b>z:/Quant_CO2/IMPORT/SHORT_INTEREST/</b> directory</p>"
+				+ "<p>The algorithm is recursive, so the multilevel folder structure is supported</p>"
+				+ "<p>The data will be saved to <b>short_interest</b> mongo collection</p>",
+				ShortInterest.class), 
+			1, 0);
+		
+		addComponent(new TabPart<IPOActivity>(
+				"Collect http://nasdaq.com/ IPO activity",
+				() -> nasdaqDownloadService.downloadAllIPOActivity(),
+				"<p>Downloads the IPO activities from <i>www.nasdaq.com</i></p>"
+				+ "<p>Visits urls, like: "
+				+ "<a href=\"http://www.nasdaq.com/markets/ipos/activity.aspx?tab=pricings&month=2000-01\">http://www.nasdaq.com/markets/ipos/activity.aspx?tab=pricings&month=2000-01</a> "
+				+ "and collects all the activities from there</p>"
+				+ "<p>The start date is: <i>2000.01</i></p>"
+				+ "<p>The data will be saved to <b>ipo_activity</b> mongo collection</p>",
+				IPOActivity.class), 
+			2, 0);
 	}
 }

@@ -20,6 +20,22 @@ public class IPOActivity {
 	public double shares;
 	public double offerAmount;
 	
+	public String getName() {
+		return name;
+	}
+	
+	public String getTradingSymbol() {
+		return tradingSymbol;
+	}
+	
+	public double getPrice() {
+		return price;
+	}
+	
+	public double getShares() {
+		return shares;
+	}
+	
 	@Override
 	public String toString() {
 		ToStringBuilder builder = new ToStringBuilder(this);

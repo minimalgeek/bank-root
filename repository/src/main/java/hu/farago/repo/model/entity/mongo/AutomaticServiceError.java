@@ -13,7 +13,7 @@ import hu.farago.repo.utils.DateTimeUtils;
 public class AutomaticServiceError implements Serializable {
 
 	public enum AutomaticService {
-		STOOQ, YAHOO, SPICE_INDICES, SEEKING_ALPHA, ZACKS, MONGO_FLAT
+		STOOQ, YAHOO, SPICE_INDICES, SEEKING_ALPHA, ZACKS, MONGO_FLAT, EDGAR, NASDAQ
 	}
 
 	private static final long serialVersionUID = -7979032736517713670L;

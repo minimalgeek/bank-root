@@ -14,15 +14,16 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.server.SpringVaadinServlet;
+import com.vaadin.ui.AbsoluteLayout;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalSplitPanel;
 
+import hu.farago.data.service.ServicesService;
 import hu.farago.repo.model.entity.mongo.AutomaticServiceError;
 import hu.farago.vaadmin.tab.datadownloader.EdgarDownloaderTab;
-import hu.farago.vaadmin.tab.datadownloader.IPOActivityDownloaderTab;
 import hu.farago.vaadmin.tab.datadownloader.OthersTab;
 import hu.farago.vaadmin.tab.datadownloader.SeekingAlphaDownloaderTab;
 import hu.farago.vaadmin.tab.datadownloader.ShortInterestDownloaderTab;
@@ -40,13 +41,15 @@ public class AdminUI extends UI {
 	private VerticalSplitPanel vsp;
 	private Grid responseGrid;
 	private BeanItemContainer<AutomaticServiceError> responses;
-
+	private AbsoluteLayout responseLayout;
+	private Button automaticServiceRefreshButton;
+	
+	@Autowired
+	private ServicesService servicesService;
+	
 	@Autowired
 	private EdgarDownloaderTab edgarDownloaderTab;
-	
-	@Autowired
-	private IPOActivityDownloaderTab ipoActivityDownloaderTab;
-	
+		
 	@Autowired
 	private OthersTab othersTab;
 	
@@ -68,7 +71,7 @@ public class AdminUI extends UI {
 		buildTabs();
 		setupResponseGrid();
 
-		vsp = new VerticalSplitPanel(tabSheet, responseGrid);
+		vsp = new VerticalSplitPanel(tabSheet, responseLayout);
 		vsp.setSplitPosition(80, Unit.PERCENTAGE);
 		
 		setContent(vsp);
@@ -81,10 +84,9 @@ public class AdminUI extends UI {
 		tabSheet.addTab(seekingAlphaDownloaderTab, "SeekingAlpha Downloader", new ThemeResource("img/planets/02.png"));
 		tabSheet.addTab(edgarDownloaderTab, "Edgar Downloader", new ThemeResource("img/planets/03.png"));
 		tabSheet.addTab(shortInterestDownloaderTab, "Short Interest Downloader", new ThemeResource("img/planets/04.png"));
-		tabSheet.addTab(ipoActivityDownloaderTab, "IPO Activity Downloader", new ThemeResource("img/planets/05.png"));
-		tabSheet.addTab(stooqDownloaderTab, "Stooq Downloader", new ThemeResource("img/planets/06.png"));
+		tabSheet.addTab(stooqDownloaderTab, "Stooq Downloader", new ThemeResource("img/planets/05.png"));
 		// Mongo, Spice Indices, Yahoo
-		tabSheet.addTab(othersTab, "Others", new ThemeResource("img/planets/07.png"));
+		tabSheet.addTab(othersTab, "Others", new ThemeResource("img/planets/06.png"));
 	}
 	
 	private void setupResponseGrid() {
@@ -94,6 +96,17 @@ public class AdminUI extends UI {
 		responseGrid.setContainerDataSource(responses);
 		responseGrid.setColumnReorderingAllowed(true);
 		responseGrid.setDescription("Service Errors");
+		
+		automaticServiceRefreshButton = new Button("Refresh");
+		automaticServiceRefreshButton.addClickListener((e) -> {
+				responses.removeAllItems();
+				responses.addAll(servicesService.getErrors());
+			});
+		
+		responseLayout = new AbsoluteLayout();
+		responseLayout.setSizeFull();
+		responseLayout.addComponent(responseGrid);
+		responseLayout.addComponent(automaticServiceRefreshButton, "bottom: 5px, left: 5px");
 	}
 
 	@WebServlet(value = "/*", asyncSupported = true)

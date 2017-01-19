@@ -1,9 +1,10 @@
 package hu.farago.data.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ import hu.farago.data.seekingalpha.bloomberg.EarningsCallFileImporter;
 import hu.farago.data.utils.AutomaticServiceErrorUtils;
 import hu.farago.data.zacks.ZacksECDateManager;
 import hu.farago.repo.model.dao.mongo.EarningsCallRepository;
-import hu.farago.repo.model.entity.mongo.EarningsCall;
 import hu.farago.repo.model.entity.mongo.AutomaticServiceError.AutomaticService;
+import hu.farago.repo.model.entity.mongo.EarningsCall;
 
 @Controller
 public class SeekingAlphaDownloadService {
@@ -46,10 +47,10 @@ public class SeekingAlphaDownloadService {
 
 //	@RequestMapping(value = "/collectEarningsCalls", method = RequestMethod.GET, produces = {
 //			MediaType.APPLICATION_JSON_VALUE })
-	public List<String> collectEarningsCalls() {
+	public List<EarningsCallView> collectEarningsCalls() {
 		LOGGER.info("collectEarningsCalls");
 
-		List<String> ret = Lists.newArrayList();
+		List<EarningsCallView> ret = Lists.newArrayList();
 		try {
 			earningsCallRepository.deleteAll();
 			for (int i = 0; i < seekingAlphaDownloader.pages(); i++) {
@@ -57,9 +58,9 @@ public class SeekingAlphaDownloadService {
 
 				for (Map.Entry<String, List<EarningsCall>> entry : map.entrySet()) {
 					earningsCallRepository.save(entry.getValue());
+					ret.addAll(entry.getValue().stream().map((ec) -> new EarningsCallView(ec)).collect(Collectors.toList()));
 				}
 
-				ret.addAll(map.keySet());
 			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -70,17 +71,15 @@ public class SeekingAlphaDownloadService {
 	}
 
 	//@RequestMapping(value = "/importAllFiles", method = RequestMethod.GET)
-	public void importAllFiles() {
+	public List<EarningsCallView> importAllFiles() {
 		LOGGER.info("importAllFiles");
-		fileImporter.importAll();
+		return fileImporter.importAll().stream().map((ec) -> new EarningsCallView(ec)).collect(Collectors.toList());
 	}
 
 //	@RequestMapping(value = "/collectEarningsCallsFor/{id}", method = RequestMethod.GET, produces = {
 //			MediaType.APPLICATION_JSON_VALUE })
-	public List<String> collectEarningsCallsFor(String index) {
+	public List<EarningsCallView> collectEarningsCallsFor(String index) {
 		LOGGER.info("collectEarningsCallsFor");
-
-		List<String> ret = Lists.newArrayList();
 
 		try {
 			List<EarningsCall> list = seekingAlphaDownloader.collectAllDataForIndex(index);
@@ -88,17 +87,13 @@ public class SeekingAlphaDownloadService {
 			// remove older entries
 			earningsCallRepository.delete(earningsCallRepository.findByTradingSymbol(index));
 			earningsCallRepository.save(list);
+			
+			return list.stream().map(e -> new EarningsCallView(e)).collect(Collectors.toList());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			ret.add("Failure: " + e.getMessage());
-			aseu.saveError(AutomaticService.SEEKING_ALPHA, "Error in url: " + ret.toString());
+			aseu.saveError(AutomaticService.SEEKING_ALPHA, "Error in url: " + e.getMessage());
+			return Lists.newArrayList();
 		}
-
-		if (ret.size() == 0) {
-			ret.add("Success");
-		}
-
-		return ret;
 	}
 
 //	@RequestMapping(value = "/processQAndAAndAddStockData", method = RequestMethod.GET, produces = {
@@ -133,10 +128,10 @@ public class SeekingAlphaDownloadService {
 	// http://localhost:8082/data-downloader/collectLastNTranscripts/4
 //	@RequestMapping(value = "/collectLastNTranscripts/{nrOfTranscripts}", method = RequestMethod.GET, produces = {
 //			MediaType.APPLICATION_JSON_VALUE })
-	public List<String> collectLastNTranscripts(int numberOfTranscriptsNeeded) {
+	public List<EarningsCallView> collectLastNTranscripts(int numberOfTranscriptsNeeded) {
 		LOGGER.info("collectLastNTranscripts");
 
-		List<String> ret = new ArrayList<>();
+		List<EarningsCallView> ret = Lists.newLinkedList();
 
 		for (String indexName : seekingAlphaDownloader.getIndexes()) {
 			try {
@@ -147,7 +142,7 @@ public class SeekingAlphaDownloadService {
 					if (earningsCallRepository.findByUrl(call.url) == null) {
 						LOGGER.info("New earnings call found: " + call.url);
 						earningsCallRepository.save(call);
-						ret.add(call.url);
+						ret.add(new EarningsCallView(call));
 					}
 				}
 
@@ -176,30 +171,29 @@ public class SeekingAlphaDownloadService {
 		}
 	}
 
-	/*
-	 * @RequestMapping(value = "/appendInsiderDataToEarningsCall", method =
-	 * RequestMethod.GET) public void appendInsiderDataToEarningsCall() {
-	 * LOGGER.info("appendInsiderDataToEarningsCall");
-	 * 
-	 * for (String index : seekingAlphaDownloader.getIndexes()) {
-	 * List<EarningsCall> calls =
-	 * earningsCallRepository.findByTradingSymbol(index); calls.sort(new
-	 * Comparator<EarningsCall>() {
-	 * 
-	 * @Override public int compare(EarningsCall o1, EarningsCall o2) { return
-	 * o1.publishDate.compareTo(o2.publishDate); }
-	 * 
-	 * }); List<InsiderData> insiderDataList =
-	 * insiderDataRepo.findByIssuerTradingSymbol(index);
-	 * 
-	 * EarningsCall previousCall = null;
-	 * 
-	 * for (EarningsCall call : calls) { if (call.tone != null && previousCall
-	 * != null) { aggregator.processCall(call, previousCall, insiderDataList); }
-	 * 
-	 * previousCall = call; }
-	 * 
-	 * earningsCallRepository.save(calls); LOGGER.info(index + " processed"); }
-	 * }
-	 */
+	public class EarningsCallView {
+		
+		private String tradingSymbol;
+		private String url;
+		private DateTime publishDate;
+		
+		public EarningsCallView(EarningsCall ec) {
+			this.tradingSymbol = ec.tradingSymbol;
+			this.url = ec.url;
+			this.publishDate = ec.publishDate;
+		}
+		
+		public DateTime getPublishDate() {
+			return publishDate;
+		}
+		
+		public String getTradingSymbol() {
+			return tradingSymbol;
+		}
+		
+		public String getUrl() {
+			return url;
+		}
+		
+	}
 }

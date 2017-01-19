@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.tika.exception.TikaException;
+import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,10 @@ import hu.farago.data.nasdaq.Exchange;
 import hu.farago.data.nasdaq.HistoricalShortInterestLoader;
 import hu.farago.data.nasdaq.IPODownloader;
 import hu.farago.data.nasdaq.ShortInterestDownloader;
+import hu.farago.data.utils.AutomaticServiceErrorUtils;
 import hu.farago.repo.model.dao.mongo.IPOActivityRepository;
 import hu.farago.repo.model.dao.mongo.ShortInterestRepository;
+import hu.farago.repo.model.entity.mongo.AutomaticServiceError.AutomaticService;
 import hu.farago.repo.model.entity.mongo.IPOActivity;
 import hu.farago.repo.model.entity.mongo.ShortInterest;
 
@@ -46,10 +49,14 @@ public class NasdaqDownloadService {
 	
 	@Autowired
 	private IPOActivityRepository ipoRepository;
+	
+	@Autowired
+	private AutomaticServiceErrorUtils aseu;
 
 	//@RequestMapping(value = "/downloadShortInterestData", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public Object[] downloadShortInterestData() {
+	public List<ShortInterest> downloadShortInterestData() {
 		LOGGER.info("downloadShortInterestData");
+		List<ShortInterest> ret = Lists.newArrayList();
 		Set<String> companies = Sets.newConcurrentHashSet();
 
 		try {
@@ -66,43 +73,46 @@ public class NasdaqDownloadService {
 				newInterests.forEach(item -> {
 					if (!interests.contains(item)) {
 						repository.save(item);
+						ret.add(item);
 					}
 				});
 			}
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
+			aseu.saveError(AutomaticService.NASDAQ, e.getMessage());
 		}
 
-		return companies.toArray();
+		return ret;
 	}
 
 //	@RequestMapping(value = "/downloadHistoricalShortInterest", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public void downloadHistoricalShortInterest() {
+	public List<ShortInterest> downloadHistoricalShortInterest() {
 		LOGGER.info("downloadHistoricalShortInterest");
 		try {
-			historicalShortInterestLoader
+			return historicalShortInterestLoader
 					.importAllHistoricalDataFromDirectory();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
+			aseu.saveError(AutomaticService.NASDAQ, e.getMessage());
 		}
+		return null;
 	}
 	
 //	@RequestMapping(value = "/downloadAllIPOActivity", method = RequestMethod.GET, produces = { MediaType.TEXT_PLAIN_VALUE })
-	public String downloadAllIPOActivity() {
+	public List<IPOActivity> downloadAllIPOActivity() {
 		LOGGER.info("downloadAllIPOActivity");
 		try {
 			ipoRepository.deleteAll();
 			List<IPOActivity> list = ipoDownloader.downloadAllActivity();
 			ipoRepository.save(list);
 			
-			String msg = list.size() + " activities saved";
-			LOGGER.info(msg);
-			return msg;
+			return list;
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			return e.getMessage();
+			aseu.saveError(AutomaticService.NASDAQ, e.getMessage());
 		}
+		return null;
 	}
 	
 	private boolean addCompanyListToCompanies(Set<String> companies, Exchange ex)
