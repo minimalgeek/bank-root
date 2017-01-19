@@ -85,7 +85,6 @@ public class AdminUI extends UI {
 		tabSheet.addTab(edgarDownloaderTab, "Edgar Downloader", new ThemeResource("img/planets/03.png"));
 		tabSheet.addTab(shortInterestDownloaderTab, "Short Interest Downloader", new ThemeResource("img/planets/04.png"));
 		tabSheet.addTab(stooqDownloaderTab, "Stooq Downloader", new ThemeResource("img/planets/05.png"));
-		// Mongo, Spice Indices, Yahoo
 		tabSheet.addTab(othersTab, "Others", new ThemeResource("img/planets/06.png"));
 	}
 	
