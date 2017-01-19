@@ -13,7 +13,6 @@ hu\farago\data\service\ZacksDownloadServiceTest.class
 hu\farago\data\macroman\MacroManDownloaderTest.class
 hu\farago\data\nasdaq\ShortInterestDownloaderTest.class
 hu\farago\data\edgar\EdgarDownloaderTest.class
-hu\farago\data\SpringBootRoot.class
 hu\farago\data\model\dao\sql\ForexRepositoryTest.class
 hu\farago\data\seekingalpha\SeekingAlphaDownloaderTest.class
 hu\farago\data\seekingalpha\EarningsCallAndInsiderDataAggregatorTest.class
@@ -21,6 +20,7 @@ hu\farago\data\zacks\ZacksECDateManagerTest$1.class
 hu\farago\data\AbstractRootTest.class
 hu\farago\data\seekingalpha\SeekingAlphaQAndATest.class
 hu\farago\data\edgar\XMLToEdgarConverterTest.class
+hu\farago\SpringBootRoot.class
 hu\farago\data\nasdaq\HistoricalShortInterestLoaderTest.class
 hu\farago\data\sandp\SAndPFileWriterTest.class
 hu\farago\data\seekingalpha\SeekingAlphaDownloaderTopNTest.class

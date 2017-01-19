@@ -12,7 +12,6 @@ C:\DEV\eclipse\workspace\bank-root\downloader\src\test\java\hu\farago\data\zacks
 C:\DEV\eclipse\workspace\bank-root\downloader\src\test\java\hu\farago\data\sandp\SpicePostRequestManagerTest.java
 C:\DEV\eclipse\workspace\bank-root\downloader\src\test\java\hu\farago\data\stooq\CsvFileToHistoricalDataConverterTest.java
 C:\DEV\eclipse\workspace\bank-root\downloader\src\test\java\hu\farago\data\stooq\StooqDataDownloaderTest.java
-C:\DEV\eclipse\workspace\bank-root\downloader\src\test\java\hu\farago\data\SpringBootRoot.java
 C:\DEV\eclipse\workspace\bank-root\downloader\src\test\java\hu\farago\data\seekingalpha\EarningsCallAndInsiderDataAggregatorTest.java
 C:\DEV\eclipse\workspace\bank-root\downloader\src\test\java\hu\farago\data\AbstractDataDownloaderTest.java
 C:\DEV\eclipse\workspace\bank-root\downloader\src\test\java\hu\farago\data\macroman\MacroManDownloaderTest.java
@@ -25,6 +24,7 @@ C:\DEV\eclipse\workspace\bank-root\downloader\src\test\java\hu\farago\data\zacks
 C:\DEV\eclipse\workspace\bank-root\downloader\src\test\java\hu\farago\data\zacks\DirCompare.java
 C:\DEV\eclipse\workspace\bank-root\downloader\src\test\java\hu\farago\data\seekingalpha\EarningsCallWordCounterTest.java
 C:\DEV\eclipse\workspace\bank-root\downloader\src\test\java\hu\farago\data\nasdaq\CompanyListDownloaderTest.java
+C:\DEV\eclipse\workspace\bank-root\downloader\src\test\java\hu\farago\SpringBootRoot.java
 C:\DEV\eclipse\workspace\bank-root\downloader\src\test\java\hu\farago\data\seekingalpha\SeekingAlphaQAndATest.java
 C:\DEV\eclipse\workspace\bank-root\downloader\src\test\java\hu\farago\data\edgar\Edgar10KDownloaderTest.java
 C:\DEV\eclipse\workspace\bank-root\downloader\src\test\java\hu\farago\data\oilreport\OilReportDownloaderTest.java

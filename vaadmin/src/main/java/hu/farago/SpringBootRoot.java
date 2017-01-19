@@ -11,7 +11,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 @SpringBootApplication
 @EnableScheduling
 @PropertySource(value = { "classpath:/application-downloader.properties",
-		"classpath:/application-exporter.properties" })
+		"classpath:/application-exporter.properties",
+		"file:/C:/DEV/servers/external_configs/data-downloader-application.properties"})
 public class SpringBootRoot {
 
 	public static void main(String[] args) {

@@ -25,6 +25,7 @@ C:\DEV\eclipse\workspace\bank-root\downloader\src\main\java\hu\farago\data\macro
 C:\DEV\eclipse\workspace\bank-root\downloader\src\main\java\hu\farago\data\seekingalpha\SimpleWordProcessor.java
 C:\DEV\eclipse\workspace\bank-root\downloader\src\main\java\hu\farago\data\yahoo\YahooCurrencyPairDownloader.java
 C:\DEV\eclipse\workspace\bank-root\downloader\src\main\java\hu\farago\data\utils\URLUtils.java
+C:\DEV\eclipse\workspace\bank-root\downloader\src\main\java\hu\farago\data\service\dto\URLSuccess.java
 C:\DEV\eclipse\workspace\bank-root\downloader\src\main\java\hu\farago\data\semantic\calc\CosineSimilarity.java
 C:\DEV\eclipse\workspace\bank-root\downloader\src\main\java\hu\farago\data\semantic\calc\TfIdfCalculator.java
 C:\DEV\eclipse\workspace\bank-root\downloader\src\main\java\hu\farago\data\service\ForexDataDownloaderService.java

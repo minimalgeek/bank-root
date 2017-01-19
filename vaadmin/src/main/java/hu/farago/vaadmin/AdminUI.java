@@ -96,6 +96,8 @@ public class AdminUI extends UI {
 		responseGrid.setContainerDataSource(responses);
 		responseGrid.setColumnReorderingAllowed(true);
 		responseGrid.setDescription("Service Errors");
+		responseGrid.removeColumn("id");
+		responseGrid.removeColumn("dateTime");
 		
 		automaticServiceRefreshButton = new Button("Refresh");
 		automaticServiceRefreshButton.addClickListener((e) -> {
@@ -106,7 +108,7 @@ public class AdminUI extends UI {
 		responseLayout = new AbsoluteLayout();
 		responseLayout.setSizeFull();
 		responseLayout.addComponent(responseGrid);
-		responseLayout.addComponent(automaticServiceRefreshButton, "bottom: 5px, left: 5px");
+		responseLayout.addComponent(automaticServiceRefreshButton, "bottom: 5px; right: 5px; z-index: 1000");
 	}
 
 	@WebServlet(value = "/*", asyncSupported = true)

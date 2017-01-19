@@ -56,6 +56,7 @@ hu\farago\data\seekingalpha\ToneCalculator.class
 hu\farago\data\nasdaq\CompanyListDownloader.class
 hu\farago\data\sandp\SAndPFileWriter$CSVData.class
 hu\farago\data\sandp\SpicePostRequestManager.class
+hu\farago\data\service\SeekingAlphaDownloadService$EarningsCallView.class
 hu\farago\data\edgar\XMLToEdgarConverter.class
 hu\farago\data\zacks\ZacksFileUtils$1.class
 hu\farago\data\api\dto\HistoricalForexData.class
@@ -69,6 +70,7 @@ hu\farago\data\sandp\dto\ResponseJSON.class
 hu\farago\data\seekingalpha\YahooStockDownloader.class
 hu\farago\data\seekingalpha\EarningsCallAndInsiderDataAggregator.class
 hu\farago\data\semantic\calc\TfIdfCalculator$DocWithWordSet.class
+hu\farago\data\service\dto\URLSuccess.class
 hu\farago\data\service\MacroManService.class
 hu\farago\data\api\dto\ForexData.class
 hu\farago\data\api\DataDownloader.class
