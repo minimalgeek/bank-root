@@ -46,8 +46,6 @@ public class ZacksDownloadService {
 	@Autowired
 	private AutomaticServiceErrorUtils aseu;
 
-//	@RequestMapping(value = "/refreshAllReportDates", method = RequestMethod.GET, produces = {
-//			MediaType.APPLICATION_JSON_VALUE })
 	public List<URLSuccess> refreshAllReportDates() {
 		LOGGER.info("refreshAllReportDates");
 
@@ -70,8 +68,6 @@ public class ZacksDownloadService {
 		return refreshedURLs;
 	}
 
-//	@RequestMapping(value = "/downloadAllZECD", method = RequestMethod.GET, produces = {
-//			MediaType.APPLICATION_JSON_VALUE })
 	public List<ZacksEarningsCallDates2> downloadAllZECD() {
 		LOGGER.info("downloadAllZECD");
 

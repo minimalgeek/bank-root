@@ -23,8 +23,6 @@ public class QZacksEarningsCallDates2 extends EntityPathBase<ZacksEarningsCallDa
 
     public final DateTimePath<org.joda.time.DateTime> nextReportDate = createDateTime("nextReportDate", org.joda.time.DateTime.class);
 
-    public final BooleanPath success = createBoolean("success");
-
     public final StringPath tradingSymbol = createString("tradingSymbol");
 
     public final StringPath url = createString("url");

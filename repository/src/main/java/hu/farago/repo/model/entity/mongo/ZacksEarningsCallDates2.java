@@ -22,8 +22,6 @@ public class ZacksEarningsCallDates2 implements Serializable {
 	public String tradingSymbol;
 	@Transient
 	public String url;
-	@Transient
-	public boolean success;
 	
 	public DateTime nextReportDateInLocal() {
 		return nextReportDate.withZone(DateTimeZone.getDefault());

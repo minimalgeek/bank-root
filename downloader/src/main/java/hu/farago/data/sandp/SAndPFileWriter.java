@@ -48,8 +48,7 @@ public class SAndPFileWriter {
 		}
 	}
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(SAndPFileWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SAndPFileWriter.class);
 
 	private static final DateFormat YMD = new SimpleDateFormat("yyyy.MM.dd");
 
@@ -70,10 +69,8 @@ public class SAndPFileWriter {
 	public void reloadFileDatas() throws IOException, ParseException {
 		fileDatas = Maps.newHashMap();
 		for (SAndPGroup group : SAndPGroup.values()) {
-			File indexGroupFile = new File(FilenameUtils.concat(directoryRoot,
-					group.getName() + ".csv"));
-			List<String> content = FileUtils.readLines(indexGroupFile,
-					URLUtils.UTF_8);
+			File indexGroupFile = new File(FilenameUtils.concat(directoryRoot, group.getName() + ".csv"));
+			List<String> content = FileUtils.readLines(indexGroupFile, URLUtils.UTF_8);
 
 			List<CSVData> datas = Lists.newArrayList();
 			fileDatas.put(group, datas);
@@ -89,10 +86,8 @@ public class SAndPFileWriter {
 
 	public void writeFileDatas() throws IOException {
 		for (SAndPGroup group : SAndPGroup.values()) {
-			File indexGroupFile = new File(FilenameUtils.concat(directoryRoot,
-					group.getName() + ".csv"));
-			fileDatas.get(group).sort(
-					(c1, c2) -> (c1.ticker.compareTo(c2.ticker)));
+			File indexGroupFile = new File(FilenameUtils.concat(directoryRoot, group.getName() + ".csv"));
+			fileDatas.get(group).sort((c1, c2) -> (c1.ticker.compareTo(c2.ticker)));
 			List<String> stringDataList = Lists.newArrayList();
 			for (CSVData data : fileDatas.get(group)) {
 				stringDataList.add(data.toString());
@@ -122,23 +117,25 @@ public class SAndPFileWriter {
 
 			if (!found) {
 				if (operation.event.equals(Event.ADD)) {
-					list.add(new CSVData(index.tradingSymbol,
-							operation.eventDate.toDate(), null));
-				} else if (operation.event.equals(Event.DROP)) {
-					Optional<CSVData> dataToModify = list
-							.stream()
-							.filter(csv -> csv.ticker
-									.equals(index.tradingSymbol)
-									&& csv.outDate == null
-									&& (csv.inDate == null || csv.inDate
-											.before(operation.eventDate
-													.toDate()))).findFirst();
-					if (dataToModify.isPresent()) {
-						dataToModify.get().outDate = operation.eventDate
-								.toDate();
+					Optional<CSVData> invalidPreviousData = list.stream()
+							.filter(csv -> csv.ticker.equals(index.tradingSymbol) && csv.outDate != null
+									&& (csv.outDate.after(operation.eventDate.toDate())))
+							.findFirst();
+
+					if (invalidPreviousData.isPresent()) {
+						list.remove(invalidPreviousData.get());
 					} else {
-						list.add(new CSVData(index.tradingSymbol, null,
-								operation.eventDate.toDate()));
+						list.add(new CSVData(index.tradingSymbol, operation.eventDate.toDate(), null));
+					}
+				} else if (operation.event.equals(Event.DROP)) {
+					Optional<CSVData> dataToModify = list.stream()
+							.filter(csv -> csv.ticker.equals(index.tradingSymbol) && csv.outDate == null
+									&& (csv.inDate == null || csv.inDate.before(operation.eventDate.toDate())))
+							.findFirst();
+					if (dataToModify.isPresent()) {
+						dataToModify.get().outDate = operation.eventDate.toDate();
+					} else {
+						list.add(new CSVData(index.tradingSymbol, null, operation.eventDate.toDate()));
 					}
 				}
 			}
@@ -149,26 +146,21 @@ public class SAndPFileWriter {
 
 	private void handleTLS(String tradingSymbol, SAndPOperation operation) {
 
-		if (operation.indexGroup.equals(SAndPGroup.SP400)
-				|| operation.indexGroup.equals(SAndPGroup.SP500)
+		if (operation.indexGroup.equals(SAndPGroup.SP400) || operation.indexGroup.equals(SAndPGroup.SP500)
 				|| operation.indexGroup.equals(SAndPGroup.SP600)) {
 			addOrRemoveTLS(tradingSymbol, operation, us456);
 		}
 
-		if (operation.indexGroup.equals(SAndPGroup.SP400)
-				|| operation.indexGroup.equals(SAndPGroup.SP500)) {
+		if (operation.indexGroup.equals(SAndPGroup.SP400) || operation.indexGroup.equals(SAndPGroup.SP500)) {
 			addOrRemoveTLS(tradingSymbol, operation, us45);
 		}
 	}
 
-	private void addOrRemoveTLS(String tradingSymbol, SAndPOperation operation,
-			TLSFile tls) {
-		if (operation.event.equals(Event.ADD)
-				&& !tls.tlsData.contains(tradingSymbol)) {
+	private void addOrRemoveTLS(String tradingSymbol, SAndPOperation operation, TLSFile tls) {
+		if (operation.event.equals(Event.ADD) && !tls.tlsData.contains(tradingSymbol)) {
 			tls.tlsData.add(tradingSymbol);
 			tls.tlsAlreadyAdded.add(tradingSymbol);
-		} else if (operation.event.equals(Event.DROP)
-				&& tls.tlsData.contains(tradingSymbol)
+		} else if (operation.event.equals(Event.DROP) && tls.tlsData.contains(tradingSymbol)
 				&& !tls.tlsAlreadyAdded.contains(tradingSymbol)) {
 			tls.tlsData.remove(tradingSymbol);
 		}
@@ -181,8 +173,7 @@ public class SAndPFileWriter {
 		public Date outDate;
 
 		public CSVData(String data) throws ParseException {
-			String[] parts = StringUtils
-					.splitByWholeSeparatorPreserveAllTokens(data, ",");
+			String[] parts = StringUtils.splitByWholeSeparatorPreserveAllTokens(data, ",");
 
 			ticker = parts[0];
 			if (StringUtils.isNotEmpty(parts[1])) {
@@ -201,16 +192,15 @@ public class SAndPFileWriter {
 		}
 
 		public boolean operationIsTheSame(SAndPOperation op) {
-			return op.event.equals(Event.ADD) && inDate != null
-					&& DateUtils.isSameDay(inDate, op.eventDate.toDate())
+			return op.event.equals(Event.ADD) && inDate != null && DateUtils.isSameDay(inDate, op.eventDate.toDate())
 					|| op.event.equals(Event.DROP) && outDate != null
-					&& DateUtils.isSameDay(outDate, op.eventDate.toDate());
+							&& DateUtils.isSameDay(outDate, op.eventDate.toDate());
 		}
 
 		@Override
 		public String toString() {
-			return ticker + "," + (inDate == null ? "" : YMD.format(inDate))
-					+ "," + (outDate == null ? "" : YMD.format(outDate));
+			return ticker + "," + (inDate == null ? "" : YMD.format(inDate)) + ","
+					+ (outDate == null ? "" : YMD.format(outDate));
 		}
 	}
 }

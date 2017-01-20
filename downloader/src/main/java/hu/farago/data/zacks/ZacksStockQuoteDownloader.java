@@ -50,7 +50,7 @@ public class ZacksStockQuoteDownloader {
 	private AutomaticServiceErrorUtils aseu;
 
 	public List<ZacksEarningsCallDates2> downloadAllZECD() throws Exception {
-		List<ZacksEarningsCallDates2> ret = Lists.newArrayList();
+		List<ZacksEarningsCallDates2> ret = Lists.newLinkedList();
 
 		for (String tradingSymbol : loadIndexList()) {
 			ZacksEarningsCallDates2 zecd2 = new ZacksEarningsCallDates2();
@@ -65,16 +65,13 @@ public class ZacksStockQuoteDownloader {
 					if (matcher.find()) {
 						zecd2.nextReportDate = formatter.parseDateTime(matcher.group(0))
 								.withZoneRetainFields(DateTimeZone.UTC);
+						ret.add(zecd2);
 					}
 				}
-
-				zecd2.success = zecd2.nextReportDate != null;
 			} catch (Exception e) {
-				aseu.saveError(AutomaticService.ZACKS, zecd2.url);
-				zecd2.success = false;
+				LOGGER.error(e.getMessage(), e);
+				aseu.saveError(AutomaticService.ZACKS, e.getMessage());
 			}
-
-			ret.add(zecd2);
 		}
 		return ret;
 	}
