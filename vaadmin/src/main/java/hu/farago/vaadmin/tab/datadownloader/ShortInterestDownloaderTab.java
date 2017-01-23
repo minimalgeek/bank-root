@@ -9,7 +9,7 @@ import com.vaadin.ui.GridLayout;
 import hu.farago.data.service.NasdaqDownloadService;
 import hu.farago.repo.model.entity.mongo.IPOActivity;
 import hu.farago.repo.model.entity.mongo.ShortInterest;
-import hu.farago.vaadmin.tab.TabPartGrid;
+import hu.farago.vaadmin.tab.block.TabPartGrid;
 
 @SpringComponent
 @UIScope

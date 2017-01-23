@@ -8,8 +8,8 @@ import com.vaadin.ui.GridLayout;
 
 import hu.farago.data.service.EdgarDownloadService;
 import hu.farago.repo.model.entity.mongo.EdgarData;
-import hu.farago.vaadmin.tab.TabPartGrid;
-import hu.farago.vaadmin.tab.TabPartGridInput;
+import hu.farago.vaadmin.tab.block.TabPartGrid;
+import hu.farago.vaadmin.tab.block.TabPartGridInput;
 
 @SpringComponent
 @UIScope

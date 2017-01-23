@@ -8,9 +8,9 @@ import com.vaadin.ui.GridLayout;
 
 import hu.farago.data.service.SeekingAlphaDownloadService;
 import hu.farago.data.service.SeekingAlphaDownloadService.EarningsCallView;
-import hu.farago.vaadmin.tab.TabPartGrid;
-import hu.farago.vaadmin.tab.TabPartBasic;
-import hu.farago.vaadmin.tab.TabPartGridInput;
+import hu.farago.vaadmin.tab.block.TabPartBasic;
+import hu.farago.vaadmin.tab.block.TabPartGrid;
+import hu.farago.vaadmin.tab.block.TabPartGridInput;
 
 @SpringComponent
 @UIScope
@@ -67,7 +67,7 @@ public class SeekingAlphaDownloaderTab extends GridLayout {
 		addComponent(new TabPartGrid<EarningsCallView>(
 				"Import all Earning Call files",
 				() -> seekingAlphaDownloadService.importAllFiles(),
-				"<p>Imports all the Earnings Call from <b>c:/DEV/import_all/earnings_call/</b> directory</p>"
+				"<p>Imports all the Earnings Call from <b>z:/Quant_CO2/earnings_call/</b> directory</p>"
 				+ "<p>Filename looks like: <i>AMLN_2002Q4_20030220_1600.txt</i></p>"
 				+ "<p>The data will be saved to <b>earnings_call</b> mongo collection</p>",
 				EarningsCallView.class), 

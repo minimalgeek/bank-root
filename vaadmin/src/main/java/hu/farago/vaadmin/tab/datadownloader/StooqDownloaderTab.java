@@ -4,7 +4,7 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.GridLayout;
 
-import hu.farago.vaadmin.tab.TabPartBasic;
+import hu.farago.vaadmin.tab.block.TabPartBasic;
 
 @SpringComponent
 @UIScope

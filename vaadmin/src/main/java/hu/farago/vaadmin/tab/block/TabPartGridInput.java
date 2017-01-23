@@ -1,4 +1,4 @@
-package hu.farago.vaadmin.tab;
+package hu.farago.vaadmin.tab.block;
 
 import java.util.List;
 

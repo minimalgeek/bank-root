@@ -8,8 +8,8 @@ import com.vaadin.ui.GridLayout;
 
 import hu.farago.data.service.MacroManService;
 import hu.farago.data.service.OilReportService;
-import hu.farago.vaadmin.tab.TabPartBasic;
-import hu.farago.vaadmin.tab.TabPartAction;
+import hu.farago.vaadmin.tab.block.TabPartAction;
+import hu.farago.vaadmin.tab.block.TabPartBasic;
 
 @SpringComponent
 @UIScope

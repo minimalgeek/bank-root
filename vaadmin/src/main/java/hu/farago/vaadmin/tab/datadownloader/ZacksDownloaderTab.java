@@ -9,8 +9,8 @@ import com.vaadin.ui.GridLayout;
 import hu.farago.data.service.ZacksDownloadService;
 import hu.farago.data.service.dto.URLSuccess;
 import hu.farago.repo.model.entity.mongo.ZacksEarningsCallDates2;
-import hu.farago.vaadmin.tab.TabPartGrid;
-import hu.farago.vaadmin.tab.TabPartBasic;
+import hu.farago.vaadmin.tab.block.TabPartBasic;
+import hu.farago.vaadmin.tab.block.TabPartGrid;
 
 @SpringComponent
 @UIScope
