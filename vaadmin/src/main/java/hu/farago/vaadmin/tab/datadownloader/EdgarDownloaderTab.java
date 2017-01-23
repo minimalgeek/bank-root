@@ -8,8 +8,8 @@ import com.vaadin.ui.GridLayout;
 
 import hu.farago.data.service.EdgarDownloadService;
 import hu.farago.repo.model.entity.mongo.EdgarData;
-import hu.farago.vaadmin.tab.TabPart;
-import hu.farago.vaadmin.tab.TabPartWithInput;
+import hu.farago.vaadmin.tab.TabPartGrid;
+import hu.farago.vaadmin.tab.TabPartGridInput;
 
 @SpringComponent
 @UIScope
@@ -26,7 +26,7 @@ public class EdgarDownloaderTab extends GridLayout {
 		setMargin(true);
 		setSpacing(true);
 
-		addComponent(new TabPart<EdgarData>("Collect http://sec.gov/ Edgar data",
+		addComponent(new TabPartGrid<EdgarData>("Collect http://sec.gov/ Edgar data",
 				() -> edgarDownloadService.collectGroupContent(),
 				"<p>Downloads the Edgar Data (form4, insider trading information) based on <b>US.tls</b> file</p>"
 				+ "<p>Visits all the ticker's urls (e.g.: "
@@ -36,7 +36,7 @@ public class EdgarDownloaderTab extends GridLayout {
 				EdgarData.class), 
 			0, 0);
 
-		addComponent(new TabPartWithInput<EdgarData, String>(
+		addComponent(new TabPartGridInput<EdgarData, String>(
 				"Collect http://sec.gov/ Edgar data",
 				"Trading Symbol: ", 
 				(e) -> edgarDownloadService.collectGroupContentFor(e), 

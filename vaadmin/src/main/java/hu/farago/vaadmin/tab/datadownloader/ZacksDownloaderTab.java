@@ -9,7 +9,7 @@ import com.vaadin.ui.GridLayout;
 import hu.farago.data.service.ZacksDownloadService;
 import hu.farago.data.service.dto.URLSuccess;
 import hu.farago.repo.model.entity.mongo.ZacksEarningsCallDates2;
-import hu.farago.vaadmin.tab.TabPart;
+import hu.farago.vaadmin.tab.TabPartGrid;
 import hu.farago.vaadmin.tab.TabPartBasic;
 
 @SpringComponent
@@ -28,7 +28,7 @@ public class ZacksDownloaderTab extends GridLayout {
 		setSpacing(true);
 
 		addComponent(
-				new TabPart<URLSuccess>(
+				new TabPartGrid<URLSuccess>(
 					"OLD - Refresh all report dates from http://zacks.com", 
 					() -> zacksDownloadService.refreshAllReportDates(), 
 					"<p>Downloads the (earnings call) report dates based on the registered profiles on zacks.com</p>"
@@ -37,7 +37,7 @@ public class ZacksDownloaderTab extends GridLayout {
 				0, 0);
 		
 		addComponent(
-				new TabPart<ZacksEarningsCallDates2>(
+				new TabPartGrid<ZacksEarningsCallDates2>(
 					"NEW - Refresh all report dates from http://zacks.com", 
 					() -> zacksDownloadService.downloadAllZECD(), 
 					"<p>Downloads the (earnings call) report dates based on <b>US.tls</b> file</p>"

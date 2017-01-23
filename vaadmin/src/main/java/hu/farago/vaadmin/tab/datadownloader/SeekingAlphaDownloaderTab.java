@@ -8,9 +8,9 @@ import com.vaadin.ui.GridLayout;
 
 import hu.farago.data.service.SeekingAlphaDownloadService;
 import hu.farago.data.service.SeekingAlphaDownloadService.EarningsCallView;
-import hu.farago.vaadmin.tab.TabPart;
+import hu.farago.vaadmin.tab.TabPartGrid;
 import hu.farago.vaadmin.tab.TabPartBasic;
-import hu.farago.vaadmin.tab.TabPartWithInput;
+import hu.farago.vaadmin.tab.TabPartGridInput;
 
 @SpringComponent
 @UIScope
@@ -27,7 +27,7 @@ public class SeekingAlphaDownloaderTab extends GridLayout {
 		setMargin(true);
 		setSpacing(true);
 
-		addComponent(new TabPart<EarningsCallView>(
+		addComponent(new TabPartGrid<EarningsCallView>(
 				"Collect http://seekingalpha.com/ data",
 				() -> seekingAlphaDownloadService.collectEarningsCalls(),
 				"<p>Downloads the earnings call transcripts based on <b>US.tls</b> file</p>"
@@ -38,7 +38,7 @@ public class SeekingAlphaDownloaderTab extends GridLayout {
 				EarningsCallView.class), 
 			0, 0);
 
-		addComponent(new TabPartWithInput<EarningsCallView, String>(
+		addComponent(new TabPartGridInput<EarningsCallView, String>(
 				"Collect http://seekingalpha.com/ data",
 				"Trading Symbol: ", 
 				(e) -> seekingAlphaDownloadService.collectEarningsCallsFor(e), 
@@ -51,7 +51,7 @@ public class SeekingAlphaDownloaderTab extends GridLayout {
 				String.class), 
 			1, 0);
 
-		addComponent(new TabPartWithInput<EarningsCallView, Integer>(
+		addComponent(new TabPartGridInput<EarningsCallView, Integer>(
 				"Collect http://seekingalpha.com/ data",
 				"Number of fresh transcripts: ", 
 				(e) -> seekingAlphaDownloadService.collectLastNTranscripts(e), 
@@ -64,7 +64,7 @@ public class SeekingAlphaDownloaderTab extends GridLayout {
 				Integer.class), 
 				2, 0);
 		
-		addComponent(new TabPart<EarningsCallView>(
+		addComponent(new TabPartGrid<EarningsCallView>(
 				"Import all Earning Call files",
 				() -> seekingAlphaDownloadService.importAllFiles(),
 				"<p>Imports all the Earnings Call from <b>c:/DEV/import_all/earnings_call/</b> directory</p>"

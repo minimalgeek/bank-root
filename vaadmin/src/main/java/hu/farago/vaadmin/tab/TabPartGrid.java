@@ -5,30 +5,24 @@ import java.util.List;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class TabPartWithInput<T, S> extends TabPartBasic {
+public class TabPartGrid<T> extends TabPartBasic {
 
-	private static final long serialVersionUID = 5650712561772147910L;
+	private static final long serialVersionUID = 7331887909881138593L;
 
-	private TextField input;
 	private Button button;
+	
 	private Grid response;
 	private BeanItemContainer<T> container;
 
-	public TabPartWithInput(String buttonCaption, String inputCaption,
-			Call<T, S> call, String descriptionText, Class<T> clazz,
-			Class<S> inputClazz) {
+	public TabPartGrid(String buttonCaption, Call<T> call, String descriptionText,
+			Class<T> clazz) {
 		buildCommonParts(descriptionText);
-		this.input = new TextField(inputCaption);
-		this.input.setConverter(inputClazz);
-		this.input.setNullRepresentation("");
-		this.button = new Button(buttonCaption, e -> addContentToGrid(call.call((S) this.input.getConvertedValue())));
+		this.button = new Button(buttonCaption, e -> addContentToGrid(call.call()));
 		this.button.setStyleName(ValoTheme.BUTTON_PRIMARY);
 		buildGrid(clazz);
-		addComponents(input, button, response, description);
+		addComponents(button, response, description);
 	}
 
 	private void buildGrid(Class<T> clazz) {
@@ -39,14 +33,18 @@ public class TabPartWithInput<T, S> extends TabPartBasic {
 		this.response.setSizeFull();
 		this.response.setResponsive(true);
 		this.response.setColumnReorderingAllowed(true);
+		// TODO meeh, workaround for the width...
+		if (this.response.getColumn("url") != null) {
+			this.response.getColumn("url").setWidth(2000.0);
+		}
 	}
-
+	
 	public void addContentToGrid(List<T> content) {
 		this.container.addAll(content);
 	}
 
-	public interface Call<T, S> {
-		List<T> call(S param);
+	public interface Call<T> {
+		List<T> call();
 	}
-
+	
 }

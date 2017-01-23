@@ -9,7 +9,7 @@ import com.vaadin.ui.GridLayout;
 import hu.farago.data.service.NasdaqDownloadService;
 import hu.farago.repo.model.entity.mongo.IPOActivity;
 import hu.farago.repo.model.entity.mongo.ShortInterest;
-import hu.farago.vaadmin.tab.TabPart;
+import hu.farago.vaadmin.tab.TabPartGrid;
 
 @SpringComponent
 @UIScope
@@ -29,7 +29,7 @@ public class ShortInterestDownloaderTab extends GridLayout {
 //		nasdaq.shortInterest.urlBase = http://www.nasdaq.com/symbol/
 //			nasdaq.shortInterest.urlEnd = /short-interest
 		
-		addComponent(new TabPart<ShortInterest>(
+		addComponent(new TabPartGrid<ShortInterest>(
 				"Collect http://nasdaq.com/ short interest data",
 				() -> nasdaqDownloadService.downloadShortInterestData(),
 				"<p>Downloads the short interests based on the most fresh ticker lists found on "
@@ -43,7 +43,7 @@ public class ShortInterestDownloaderTab extends GridLayout {
 				ShortInterest.class), 
 			0, 0);
 		
-		addComponent(new TabPart<ShortInterest>(
+		addComponent(new TabPartGrid<ShortInterest>(
 				"Collect historical short interest data",
 				() -> nasdaqDownloadService.downloadHistoricalShortInterest(),
 				"<p>Imports the short interests from the csv files under <b>z:/Quant_CO2/IMPORT/SHORT_INTEREST/</b> directory</p>"
@@ -52,7 +52,7 @@ public class ShortInterestDownloaderTab extends GridLayout {
 				ShortInterest.class), 
 			1, 0);
 		
-		addComponent(new TabPart<IPOActivity>(
+		addComponent(new TabPartGrid<IPOActivity>(
 				"Collect http://nasdaq.com/ IPO activity",
 				() -> nasdaqDownloadService.downloadAllIPOActivity(),
 				"<p>Downloads the IPO activities from <i>www.nasdaq.com</i></p>"

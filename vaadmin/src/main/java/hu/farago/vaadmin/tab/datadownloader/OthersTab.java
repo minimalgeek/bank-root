@@ -9,7 +9,7 @@ import com.vaadin.ui.GridLayout;
 import hu.farago.data.service.MacroManService;
 import hu.farago.data.service.OilReportService;
 import hu.farago.vaadmin.tab.TabPartBasic;
-import hu.farago.vaadmin.tab.TabPartNoResponse;
+import hu.farago.vaadmin.tab.TabPartAction;
 
 @SpringComponent
 @UIScope
@@ -46,14 +46,14 @@ public class OthersTab extends GridLayout {
 						+ "<p>It is necessary for the <b>AmiBroker - MongoDB Bridge</b>, because AmiBroker can not work on complex objects</p>"),
 				2, 0);
 
-		addComponent(new TabPartNoResponse("Collect https://iea.org/ oil reports tone",
+		addComponent(new TabPartAction("Collect https://iea.org/ oil reports tone",
 				() -> oilReportService.downloadOilReports(),
 				"<p>Collects all the reports between 2007 and 2016, then split them by sections for further textual tone processing</p>"
 						+ "<p>The tone processing is based on Henry Words</p>"
 						+ "<p>The data will be saved to <b>oil_report</b> mongo collection</p>"),
 				0, 1);
 
-		addComponent(new TabPartNoResponse("Collect https://macro-man.blogspot.hu/ article and comments tone",
+		addComponent(new TabPartAction("Collect https://macro-man.blogspot.hu/ article and comments tone",
 				() -> macroManService.downloadMacroMans(),
 				"<p>Collects all the articles and comments between 2006 and 2016 for further textual tone processing</p>"
 						+ "<p>The tone processing is based on Henry Words</p>"
