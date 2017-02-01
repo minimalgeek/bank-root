@@ -52,13 +52,13 @@ public class EarningsCallFileImporter {
 			try {
 				EarningsCall ec = createEarningsCall(file);
 				repository.deleteByUrl(ec.url);
-				repository.save(ec);
+				repository.saveFlat(ec);
+				ret.add(ec);
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
 			}
 		}
 
-		repository.save(ret);
 		return ret;
 	}
 

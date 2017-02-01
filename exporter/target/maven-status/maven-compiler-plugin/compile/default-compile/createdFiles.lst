@@ -1,8 +1,0 @@
-hu\farago\mongo\service\AggregateService.class
-hu\farago\mongo\exporter\MongoExporter.class
-hu\farago\mongo\service\MongoExportService.class
-hu\farago\mongo\exporter\CSVUtils$ParameterDTO.class
-hu\farago\mongo\exporter\dto\EarningsCallDTO.class
-hu\farago\mongo\exporter\CSVUtils.class
-hu\farago\mongo\exporter\CSVUtils$1.class
-hu\farago\mongo\flatten\AggregateRunner.class

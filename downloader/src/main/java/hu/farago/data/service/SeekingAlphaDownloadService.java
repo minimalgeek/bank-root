@@ -57,7 +57,7 @@ public class SeekingAlphaDownloadService {
 				Map<String, List<EarningsCall>> map = seekingAlphaDownloader.parseAll(i);
 
 				for (Map.Entry<String, List<EarningsCall>> entry : map.entrySet()) {
-					earningsCallRepository.save(entry.getValue());
+					earningsCallRepository.saveFlat(entry.getValue());
 					ret.addAll(entry.getValue().stream().map((ec) -> new EarningsCallView(ec)).collect(Collectors.toList()));
 				}
 
@@ -84,7 +84,7 @@ public class SeekingAlphaDownloadService {
 
 			// remove older entries
 			earningsCallRepository.delete(earningsCallRepository.findByTradingSymbol(index));
-			earningsCallRepository.save(list);
+			earningsCallRepository.saveFlat(list);
 			
 			return list.stream().map(e -> new EarningsCallView(e)).collect(Collectors.toList());
 		} catch (Exception e) {
@@ -109,7 +109,7 @@ public class SeekingAlphaDownloadService {
 					}
 				}
 
-				earningsCallRepository.save(calls);
+				earningsCallRepository.saveFlat(calls);
 				LOGGER.info(index + " processed");
 				ret.add(index);
 			}
@@ -145,7 +145,7 @@ public class SeekingAlphaDownloadService {
 			for (EarningsCall call : calls) {
 				if (earningsCallRepository.findByUrl(call.url) == null) {
 					LOGGER.info("New earnings call found: " + call.url);
-					earningsCallRepository.save(call);
+					earningsCallRepository.saveFlat(call);
 					ret.add(new EarningsCallView(call));
 				}
 			}

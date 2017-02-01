@@ -97,7 +97,7 @@ public class ZacksECDateManager {
 					zecd.foundEarningsCallId = olderCall.id;
 					zacksRepository.save(zecd);
 				} else {
-					call = ecRepository.save(call);
+					call = ecRepository.saveFlat(call);
 					
 					zecd.foundEarningsCallId = call.id;
 					zacksRepository.save(zecd);

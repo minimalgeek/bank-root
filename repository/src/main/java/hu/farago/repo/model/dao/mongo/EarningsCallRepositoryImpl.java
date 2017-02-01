@@ -1,7 +1,5 @@
 package hu.farago.repo.model.dao.mongo;
 
-import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -9,10 +7,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.repository.query.MongoEntityInformation;
-import org.springframework.data.mongodb.repository.support.SimpleMongoRepository;
-import org.springframework.data.repository.core.EntityInformation;
-import org.springframework.data.repository.support.Repositories;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -29,7 +23,7 @@ public class EarningsCallRepositoryImpl implements EarningsCallRepositoryCustom 
 	private EarningsCallFlatSaver ecfSaver;
 
 	@Override
-	public <S extends EarningsCall> S save(S entity) {
+	public <S extends EarningsCall> S saveFlat(S entity) {
 
 		Assert.notNull(entity, "Entity must not be null!");
 		String collectionName = mongoOperations.getCollectionName(EarningsCall.class);
@@ -44,9 +38,8 @@ public class EarningsCallRepositoryImpl implements EarningsCallRepositoryCustom 
 		return entity;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public <S extends EarningsCall> List<S> save(Iterable<S> entities) {
+	public <S extends EarningsCall> List<S> saveFlat(Iterable<S> entities) {
 		Assert.notNull(entities, "The given Iterable of entities not be null!");
 
 		List<S> result = convertIterableToList(entities);
@@ -63,11 +56,10 @@ public class EarningsCallRepositoryImpl implements EarningsCallRepositoryCustom 
 		} else {
 
 			for (S entity : result) {
-				save(entity);
+				saveFlat(entity);
 			}
 		}
 
-		ecfSaver.saveEarningsCallsFlat((List<EarningsCall>) result);
 		return result;
 	}
 

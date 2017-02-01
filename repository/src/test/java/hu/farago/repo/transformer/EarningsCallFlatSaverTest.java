@@ -76,7 +76,7 @@ public class EarningsCallFlatSaverTest {
 
 	@Test
 	public void beforeEarningsCallSaveTest() {
-		ec1 = ecRepo.save(ec1);
+		ec1 = ecRepo.saveFlat(ec1);
 		List<EarningsCallFlat> flats = ecFlatRepo.findAll();
 		assertEquals(1, flats.size());
 		assertThat(flats.get(0).tradingSymbol).isEqualTo("AAPL");
@@ -85,7 +85,7 @@ public class EarningsCallFlatSaverTest {
 	@Test
 	public void beforeEarningsCallsSaveTest() {
 		List<EarningsCall> calls = Lists.newArrayList(ec2, ec3);
-		ecRepo.save(calls);
+		ecRepo.saveFlat(calls);
 		List<EarningsCallFlat> flats = ecFlatRepo.findAll();
 		assertEquals(2, flats.size());
 	}
