@@ -76,8 +76,6 @@ public class SeekingAlphaDownloadService {
 		return fileImporter.importAll().stream().map((ec) -> new EarningsCallView(ec)).collect(Collectors.toList());
 	}
 
-//	@RequestMapping(value = "/collectEarningsCallsFor/{id}", method = RequestMethod.GET, produces = {
-//			MediaType.APPLICATION_JSON_VALUE })
 	public List<EarningsCallView> collectEarningsCallsFor(String index) {
 		LOGGER.info("collectEarningsCallsFor");
 
@@ -96,8 +94,6 @@ public class SeekingAlphaDownloadService {
 		}
 	}
 
-//	@RequestMapping(value = "/processQAndAAndAddStockData", method = RequestMethod.GET, produces = {
-//			MediaType.APPLICATION_JSON_VALUE })
 	public List<String> processQAndAAndAddStockData() {
 		LOGGER.info("processQAndAAndAddStockData");
 
@@ -125,31 +121,38 @@ public class SeekingAlphaDownloadService {
 		return ret;
 	}
 
-	// http://localhost:8082/data-downloader/collectLastNTranscripts/4
-//	@RequestMapping(value = "/collectLastNTranscripts/{nrOfTranscripts}", method = RequestMethod.GET, produces = {
-//			MediaType.APPLICATION_JSON_VALUE })
 	public List<EarningsCallView> collectLastNTranscripts(int numberOfTranscriptsNeeded) {
 		LOGGER.info("collectLastNTranscripts");
 
 		List<EarningsCallView> ret = Lists.newLinkedList();
 
 		for (String indexName : seekingAlphaDownloader.getIndexes()) {
-			try {
-				List<EarningsCall> calls = seekingAlphaDownloader.collectLatestNForIndex(
-						new ProcessFirstNArticleParameter(indexName, numberOfTranscriptsNeeded));
+			ret.addAll(collectLastNTranscriptsFor(numberOfTranscriptsNeeded, indexName));
+		}
 
-				for (EarningsCall call : calls) {
-					if (earningsCallRepository.findByUrl(call.url) == null) {
-						LOGGER.info("New earnings call found: " + call.url);
-						earningsCallRepository.save(call);
-						ret.add(new EarningsCallView(call));
-					}
+		return ret;
+	}
+	
+	public List<EarningsCallView> collectLastNTranscriptsFor(int numberOfTranscriptsNeeded, String ticker) {
+		LOGGER.info("collectLastNTranscriptsFor");
+
+		List<EarningsCallView> ret = Lists.newLinkedList();
+
+		try {
+			List<EarningsCall> calls = seekingAlphaDownloader.collectLatestNForIndex(
+					new ProcessFirstNArticleParameter(ticker, numberOfTranscriptsNeeded));
+
+			for (EarningsCall call : calls) {
+				if (earningsCallRepository.findByUrl(call.url) == null) {
+					LOGGER.info("New earnings call found: " + call.url);
+					earningsCallRepository.save(call);
+					ret.add(new EarningsCallView(call));
 				}
-
-			} catch (Exception e) {
-				LOGGER.error(e.getMessage(), e);
-				aseu.saveError(AutomaticService.SEEKING_ALPHA, e.getMessage());
 			}
+
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			aseu.saveError(AutomaticService.SEEKING_ALPHA, e.getMessage());
 		}
 
 		return ret;

@@ -5,6 +5,7 @@ hu\farago\vaadmin\tab\block\TabPartGrid.class
 hu\farago\vaadmin\tab\block\TabPartGrid$Call.class
 hu\farago\vaadmin\tab\block\TabPartBasic.class
 hu\farago\vaadmin\tab\datadownloader\SeekingAlphaDownloaderTab.class
+hu\farago\vaadmin\tab\block\TabPartGridInput$InputBlock.class
 hu\farago\vaadmin\tab\datadownloader\ZacksDownloaderTab.class
 hu\farago\vaadmin\tab\block\TabPartAction.class
 hu\farago\vaadmin\tab\datadownloader\ShortInterestDownloaderTab.class

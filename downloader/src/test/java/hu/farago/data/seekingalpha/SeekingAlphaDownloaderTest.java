@@ -1,10 +1,8 @@
 package hu.farago.data.seekingalpha;
 
 
-import hu.farago.data.AbstractRootTest;
-import hu.farago.repo.model.entity.mongo.EarningsCall;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +12,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Ignore("It is very time consuming")
+import hu.farago.data.AbstractRootTest;
+import hu.farago.repo.model.entity.mongo.EarningsCall;
+
+//@Ignore("It is very time consuming")
 public class SeekingAlphaDownloaderTest extends AbstractRootTest {
 	
 	private static final String AAPL = "AAPL";

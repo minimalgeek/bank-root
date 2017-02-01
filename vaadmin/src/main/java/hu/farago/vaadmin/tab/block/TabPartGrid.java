@@ -40,6 +40,7 @@ public class TabPartGrid<T> extends TabPartBasic {
 	}
 	
 	public void addContentToGrid(List<T> content) {
+		this.container.removeAllItems();
 		this.container.addAll(content);
 	}
 

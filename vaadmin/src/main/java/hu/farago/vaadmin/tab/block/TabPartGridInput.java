@@ -1,32 +1,55 @@
 package hu.farago.vaadmin.tab.block;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.google.common.collect.Lists;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class TabPartGridInput<T, S> extends TabPartBasic {
+public class TabPartGridInput<T> extends TabPartBasic {
 
 	private static final long serialVersionUID = 5650712561772147910L;
 
-	private TextField input;
 	private Button button;
 	private Grid response;
 	private BeanItemContainer<T> container;
+	private List<InputBlock<?>> inputs;
+	
+	public static class InputBlock<C> {
+		private TextField input;
+		
+		public InputBlock(String caption, Class<C> clazz) {
+			this.input = new TextField(caption);
+			this.input.setConverter(clazz);
+			this.input.setNullRepresentation("");
+		}
+		
+		@SuppressWarnings("unchecked")
+		public C getConvertedValue() {
+			return (C) this.input.getConvertedValue();
+		}
+	}
 
-	public TabPartGridInput(String buttonCaption, String inputCaption, Call<T, S> call, String descriptionText,
-			Class<T> clazz, Class<S> inputClazz) {
+	public TabPartGridInput(String buttonCaption, Call<T> call, String descriptionText,
+			Class<T> clazz, List<InputBlock<?>> inputs) {
 		buildCommonParts(descriptionText);
-		this.input = new TextField(inputCaption);
-		this.input.setConverter(inputClazz);
-		this.input.setNullRepresentation("");
-		this.button = new Button(buttonCaption, e -> addContentToGrid(call.call((S) this.input.getConvertedValue())));
+		this.button = new Button(buttonCaption, e -> {
+			Object[] params = 
+					this.inputs.stream().map(c -> c.getConvertedValue()).collect(Collectors.toList()).toArray();
+			List<T> retList = call.call(params);
+			addContentToGrid(retList);
+		});
 		this.button.setStyleName(ValoTheme.BUTTON_PRIMARY);
 		buildGrid(clazz);
-		addComponents(input, button, response, description);
+		this.inputs = inputs;
+		for (InputBlock<?> block : inputs) {
+			addComponent(block.input);
+		}
+		addComponents(button, response, description);
 	}
 
 	private void buildGrid(Class<T> clazz) {
@@ -44,11 +67,12 @@ public class TabPartGridInput<T, S> extends TabPartBasic {
 	}
 
 	public void addContentToGrid(List<T> content) {
+		this.container.removeAllItems();
 		this.container.addAll(content);
 	}
 
-	public interface Call<T, S> {
-		List<T> call(S param);
+	public interface Call<T> {
+		List<T> call(Object... params);
 	}
 
 }

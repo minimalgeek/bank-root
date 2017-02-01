@@ -21,6 +21,7 @@ import hu.farago.data.api.WordProcessor;
 import hu.farago.data.seekingalpha.ToneCalculator;
 import hu.farago.repo.model.dao.mongo.EarningsCallRepository;
 import hu.farago.repo.model.entity.mongo.EarningsCall;
+import hu.farago.repo.transformer.EarningsCallFlatSaver;
 import hu.farago.repo.utils.DateTimeUtils;
 
 @Component

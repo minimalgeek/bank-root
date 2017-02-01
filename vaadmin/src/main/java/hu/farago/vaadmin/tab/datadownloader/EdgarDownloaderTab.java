@@ -2,6 +2,7 @@ package hu.farago.vaadmin.tab.datadownloader;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.google.common.collect.Lists;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.GridLayout;
@@ -10,6 +11,7 @@ import hu.farago.data.service.EdgarDownloadService;
 import hu.farago.repo.model.entity.mongo.EdgarData;
 import hu.farago.vaadmin.tab.block.TabPartGrid;
 import hu.farago.vaadmin.tab.block.TabPartGridInput;
+import hu.farago.vaadmin.tab.block.TabPartGridInput.InputBlock;
 
 @SpringComponent
 @UIScope
@@ -35,18 +37,17 @@ public class EdgarDownloaderTab extends GridLayout {
 				+ "<p>The data will be saved to <b>edgar_data</b> mongo collection</p>",
 				EdgarData.class), 
 			0, 0);
-
-		addComponent(new TabPartGridInput<EdgarData, String>(
+		
+		addComponent(new TabPartGridInput<EdgarData>(
 				"Collect http://sec.gov/ Edgar data",
-				"Trading Symbol: ", 
-				(e) -> edgarDownloadService.collectGroupContentFor(e), 
+				(e) -> edgarDownloadService.collectGroupContentFor((String) e[0]), 
 				"<p>Downloads the Edgar Data (form4, insider trading information) for the <b>Trading Symbol</b></p>"
 				+ "<p>Visits url, like: "
 				+ "<a href=\"https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=AAPL&type=&dateb=&owner=include&start=40&count=40\">www.sec.gov/...</a> "
 				+ ", iterates over all the pages, then iterates over all the links on the pages and collects all the files found there with <i>.xml</i> extension</p>"
 				+ "<p>The data will be saved to <b>edgar_data</b> mongo collection</p>",
 				EdgarData.class,
-				String.class), 
+				Lists.newArrayList(new InputBlock<String>("Trading Symbol: ", String.class))), 
 			1, 0);
 		
 	}

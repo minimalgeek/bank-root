@@ -2,6 +2,7 @@ package hu.farago.data.seekingalpha;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import com.google.common.collect.Lists;
 
@@ -23,8 +25,8 @@ import hu.farago.data.api.DataDownloader;
 import hu.farago.data.api.WordProcessor;
 import hu.farago.data.utils.AutomaticServiceErrorUtils;
 import hu.farago.data.utils.URLUtils;
-import hu.farago.repo.model.entity.mongo.EarningsCall;
 import hu.farago.repo.model.entity.mongo.AutomaticServiceError.AutomaticService;
+import hu.farago.repo.model.entity.mongo.EarningsCall;
 import hu.farago.repo.utils.DateTimeUtils;
 
 @Component
@@ -131,6 +133,13 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 	private EarningsCall createEarningsCall(Element dataRow, String index)
 			throws Exception {
 		
+		// built in slowdown because of HTTP 429
+		try {
+		    TimeUnit.MILLISECONDS.sleep(2000 + (long)(Math.random()*2000));
+		} catch (InterruptedException e) {
+		    LOGGER.error(e.getMessage(), e);
+		}
+		
 		String href = dataRow.attr("href");
 		String articleUrl = articleUrlBase + href;
 		LOGGER.info("Processing: " + articleUrl);
@@ -170,7 +179,8 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 	}
 	
 	public EarningsCall collectLatestForIndex(ProcessFirstNArticleParameter parameterObject) throws Exception {
-		return collectLatestNForIndex(parameterObject).get(0);
+		List<EarningsCall> lst = collectLatestNForIndex(parameterObject);
+		return CollectionUtils.isEmpty(lst) ? null : lst.get(0);
 	}
 	
 	public List<EarningsCall> collectLatestNForIndex(ProcessFirstNArticleParameter parameterObject) throws Exception {

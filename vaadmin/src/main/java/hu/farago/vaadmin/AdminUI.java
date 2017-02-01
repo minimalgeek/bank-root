@@ -12,6 +12,7 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.server.SpringVaadinServlet;
 import com.vaadin.ui.AbsoluteLayout;
@@ -97,11 +98,13 @@ public class AdminUI extends UI {
 		responseGrid.setDescription("Service Errors");
 		responseGrid.removeColumn("id");
 		responseGrid.removeColumn("dateTime");
+		responseGrid.sort("dateTimeString", SortDirection.DESCENDING);
 		
 		automaticServiceRefreshButton = new Button("Refresh");
 		automaticServiceRefreshButton.addClickListener((e) -> {
 				responses.removeAllItems();
 				responses.addAll(servicesService.getErrors());
+				responseGrid.sort("dateTimeString", SortDirection.DESCENDING);
 			});
 		
 		responseLayout = new AbsoluteLayout();

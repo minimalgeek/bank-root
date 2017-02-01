@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import hu.farago.repo.model.entity.mongo.EarningsCall;
 
-public interface EarningsCallRepository extends MongoRepository<EarningsCall, BigInteger> {
+public interface EarningsCallRepository extends MongoRepository<EarningsCall, BigInteger>, EarningsCallRepositoryCustom {
 	
 	List<EarningsCall> findByTradingSymbol(String tradingSymbol);
 	
