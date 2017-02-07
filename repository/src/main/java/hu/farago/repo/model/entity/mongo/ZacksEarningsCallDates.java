@@ -2,15 +2,12 @@ package hu.farago.repo.model.entity.mongo;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import com.google.common.collect.Lists;
 
 @Document(collection = "zacks_earnings_call_dates")
 public class ZacksEarningsCallDates implements Serializable {
@@ -22,8 +19,6 @@ public class ZacksEarningsCallDates implements Serializable {
 	
 	public DateTime nextReportDate;
 	public String tradingSymbol;
-	public List<DateTime> seekingAlphaCheckDate = Lists.newArrayList();
-	
 	public BigInteger foundEarningsCallId;
 	
 	public DateTime nextReportDateInLocal() {

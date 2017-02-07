@@ -1,6 +1,6 @@
 package hu.farago.data.zacks;
 
-import hu.farago.data.seekingalpha.ProcessFirstNArticleParameter;
+import hu.farago.data.seekingalpha.EarningsCallCollectFilter;
 import hu.farago.data.seekingalpha.SeekingAlphaDownloader;
 import hu.farago.data.utils.AutomaticServiceErrorUtils;
 import hu.farago.repo.model.dao.mongo.EarningsCallRepository;
@@ -75,9 +75,9 @@ public class ZacksECDateManager {
 	}
 
 	public void lookForTranscripts() {
-		List<DateTime> dateTimesToCheck = 
-				Lists.newArrayList(DateTime.now().withZone(DateTimeZone.UTC).withTimeAtStartOfDay());
-		List<ZacksEarningsCallDates> listOfCallDates = zacksRepository.findBySeekingAlphaCheckDateIn(dateTimesToCheck);
+		DateTime to = DateTime.now().withZone(DateTimeZone.UTC).withTimeAtStartOfDay();
+		DateTime from = to.minusDays(4);
+		List<ZacksEarningsCallDates> listOfCallDates = zacksRepository.findByNextReportDateBetween(from, to);
 		
 		for (ZacksEarningsCallDates zecd : listOfCallDates) {
 			if (zecd.foundEarningsCallId == null) {
@@ -90,13 +90,14 @@ public class ZacksECDateManager {
 	
 	private void searchForEarningsCall(ZacksEarningsCallDates zecd) {
 		try {
-			EarningsCall call = downloader.collectLatestForIndex(new ProcessFirstNArticleParameter(zecd.tradingSymbol));
+			EarningsCall call = downloader.collectLatestForIndex(new EarningsCallCollectFilter(zecd.tradingSymbol));
 			if (call != null && call.publishDate.isAfter(zecd.nextReportDate.minusDays(5)) && call.publishDate.isBefore(zecd.nextReportDate.plusDays(5))) {
 				EarningsCall olderCall = ecRepository.findByUrl(call.url);
 				if (olderCall != null) {
 					zecd.foundEarningsCallId = olderCall.id;
 					zacksRepository.save(zecd);
 				} else {
+					call.zacksEarningsCallDate = zecd.nextReportDate;
 					call = ecRepository.saveFlat(call);
 					
 					zecd.foundEarningsCallId = call.id;
@@ -114,10 +115,6 @@ public class ZacksECDateManager {
 		ZacksEarningsCallDates dateToStore = new ZacksEarningsCallDates();
 		
 		dateToStore.nextReportDate = obj.nextReportDate;
-		dateToStore.seekingAlphaCheckDate.add(dateToStore.nextReportDate);
-		dateToStore.seekingAlphaCheckDate.add(dateToStore.nextReportDate.plusDays(1));
-		dateToStore.seekingAlphaCheckDate.add(dateToStore.nextReportDate.plusDays(2));
-		dateToStore.seekingAlphaCheckDate.add(dateToStore.nextReportDate.plusDays(3));
 		dateToStore.tradingSymbol = obj.tradingSymbol;
 		
 		return dateToStore;

@@ -14,6 +14,6 @@ public interface ZacksEarningsCallDatesRepository extends MongoRepository<ZacksE
 	
 	ZacksEarningsCallDates findByTradingSymbolAndNextReportDate(String symbol, DateTime nextReportDate);
 	
-	List<ZacksEarningsCallDates> findBySeekingAlphaCheckDateIn(List<DateTime> dates);
+	List<ZacksEarningsCallDates> findByNextReportDateBetween(DateTime from, DateTime to);
 	
 }

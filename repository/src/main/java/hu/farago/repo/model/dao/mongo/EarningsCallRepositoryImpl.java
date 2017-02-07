@@ -28,6 +28,8 @@ public class EarningsCallRepositoryImpl implements EarningsCallRepositoryCustom 
 		Assert.notNull(entity, "Entity must not be null!");
 		String collectionName = mongoOperations.getCollectionName(EarningsCall.class);
 
+		pimpEarningsCall(entity);
+		
 		if (entity.id == null) {
 			mongoOperations.insert(entity, collectionName);
 		} else {
@@ -52,6 +54,7 @@ public class EarningsCallRepositoryImpl implements EarningsCallRepositoryCustom 
 		}
 
 		if (allNew) {
+			result.forEach((ec) -> pimpEarningsCall(ec));
 			mongoOperations.insertAll(result);
 		} else {
 
@@ -61,6 +64,16 @@ public class EarningsCallRepositoryImpl implements EarningsCallRepositoryCustom 
 		}
 
 		return result;
+	}
+	
+	private <S extends EarningsCall> void pimpEarningsCall(S entity) {
+		entity.dateNumber = (entity.publishDate.getYear() - 1900) * 10000 + 100 * entity.publishDate.getMonthOfYear()
+		+ entity.publishDate.getDayOfMonth();
+		entity.timeNumber = entity.publishDate.getHourOfDay() * 10000 + 100 * entity.publishDate.getMinuteOfHour()
+		+ entity.publishDate.getSecondOfMinute();
+
+		entity.wordSize = entity.words != null ? entity.words.size() : 0;
+		entity.q_and_a_wordSize = entity.qAndAWords != null ? entity.qAndAWords.size() : 0;
 	}
 
 	private <S extends EarningsCall> boolean isNew(S entity) {

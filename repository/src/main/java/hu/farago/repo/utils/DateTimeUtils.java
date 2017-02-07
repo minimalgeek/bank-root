@@ -37,6 +37,10 @@ public class DateTimeUtils {
 		return FORMATTER.parseDateTime(dateTime).withZoneRetainFields(DateTimeZone.UTC);
 	}
 	
+	public static String formatToYYYYMMDD(DateTime dateTime) {
+		return FORMATTER.print(dateTime);
+	}
+	
 	public static DateTime parseToYYYYMMDD_HHmmss_ZONE_UTC(String dateTime) {
 		return FORMATTER_TIME_ZONE.parseDateTime(dateTime).withZone(DateTimeZone.UTC);
 	}

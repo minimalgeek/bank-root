@@ -42,7 +42,12 @@ public class EarningsCallFlat implements Serializable {
 	@Id
 	public BigInteger id;
 	public String tradingSymbol;
-	public DateTime publishDate;
+	
+	@Field("date_number")
+	public long dateNumber;
+	@Field("time_number")
+	public long timeNumber;
+	
 	public int wordSize;
 	@Field("h_tone")
 	public HTone hTone;

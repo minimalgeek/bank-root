@@ -113,6 +113,23 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 		
 		return ret;
 	}
+	
+	public EarningsCall collectLatestForIndex(EarningsCallCollectFilter parameterObject) throws Exception {
+		parameterObject.count = 1;
+		List<EarningsCall> lst = collectLatestNForIndex(parameterObject);
+		return CollectionUtils.isEmpty(lst) ? null : lst.get(0);
+	}
+	
+	public List<EarningsCall> collectLatestNForIndex(EarningsCallCollectFilter parameterObject) throws Exception {
+		LOGGER.info("Collect latest for index: " + parameterObject.index);
+		String urlStr = buildUrl(parameterObject.index, 0);
+		String siteContent = URLUtils.getHTMLContentOfURL(urlStr);
+		Document document = Jsoup.parse(siteContent);
+		
+		parameterObject.document = document;
+		
+		return processFirstNArticle(parameterObject);
+	}
 
 	private void processTone(EarningsCall call) {
 		call.tone = toneCalculator.getToneOf(call.words);
@@ -178,23 +195,7 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 		
 	}
 	
-	public EarningsCall collectLatestForIndex(ProcessFirstNArticleParameter parameterObject) throws Exception {
-		List<EarningsCall> lst = collectLatestNForIndex(parameterObject);
-		return CollectionUtils.isEmpty(lst) ? null : lst.get(0);
-	}
-	
-	public List<EarningsCall> collectLatestNForIndex(ProcessFirstNArticleParameter parameterObject) throws Exception {
-		LOGGER.info("Collect latest for index: " + parameterObject.index);
-		String urlStr = buildUrl(parameterObject.index, 0);
-		String siteContent = URLUtils.getHTMLContentOfURL(urlStr);
-		Document document = Jsoup.parse(siteContent);
-		
-		parameterObject.document = document;
-		
-		return processFirstNArticle(parameterObject);
-	}
-	
-	private List<EarningsCall> processFirstNArticle(ProcessFirstNArticleParameter parameterObject) {
+	private List<EarningsCall> processFirstNArticle(EarningsCallCollectFilter parameterObject) {
 		Element container = parameterObject.document.getElementById("portfolo_selections");
 		Elements articles = container.getElementsByTag("a");
 		
@@ -219,7 +220,7 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 				}
 			}
 			
-			if (processed == parameterObject.count) {
+			if (parameterObject.count > 0 && processed == parameterObject.count) {
 				return processedCalls;
 			}
 		}

@@ -15,6 +15,11 @@ import hu.farago.repo.model.entity.mongo.AutomaticServiceError.AutomaticService;
 import hu.farago.repo.model.entity.mongo.EarningsCall;
 import hu.farago.repo.model.entity.mongo.EarningsCallFlat;
 
+/**
+ * It's totally unnecessary, should be removed, as well as EarningsCallFlat class collection
+ * @author neural
+ *
+ */
 @Component
 public class EarningsCallFlatSaver {
 
@@ -53,12 +58,16 @@ public class EarningsCallFlatSaver {
 	private EarningsCallFlat convert(EarningsCall call) {
 		EarningsCallFlat ecf = new EarningsCallFlat();
 		ecf.id = call.id;
-		ecf.hTone = call.hTone;
-		ecf.publishDate = call.publishDate;
-		ecf.q_and_a_wordSize = call.qAndAWords != null ? call.qAndAWords.size() : 0;
-		ecf.qAndAHTone = call.qAndAHTone;
 		ecf.tradingSymbol = call.tradingSymbol;
-		ecf.wordSize = call.words != null ? call.words.size() : 0;
+
+		ecf.hTone = call.hTone;
+		ecf.qAndAHTone = call.qAndAHTone;
+
+		ecf.dateNumber = call.dateNumber;
+		ecf.timeNumber = call.timeNumber;
+
+		ecf.q_and_a_wordSize = call.q_and_a_wordSize;
+		ecf.wordSize = call.wordSize;
 		return ecf;
 	}
 

@@ -7,6 +7,7 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.GridLayout;
 
+import hu.farago.data.seekingalpha.EarningsCallCollectFilter;
 import hu.farago.data.service.SeekingAlphaDownloadService;
 import hu.farago.data.service.SeekingAlphaDownloadService.EarningsCallView;
 import hu.farago.vaadmin.tab.block.TabPartBasic;
@@ -30,7 +31,7 @@ public class SeekingAlphaDownloaderTab extends GridLayout {
 		setSpacing(true);
 
 		addComponent(new TabPartGrid<EarningsCallView>("Collect http://seekingalpha.com/ data",
-				() -> seekingAlphaDownloadService.collectEarningsCalls(),
+				() -> seekingAlphaDownloadService.collectEarningsCalls(null),
 				"<p>Downloads the earnings call transcripts based on <b>US.tls</b> file</p>"
 						+ "<p>Visits all the ticker's url (e.g.: "
 						+ "<a href=\"http://seekingalpha.com/symbol/AAPL/earnings/transcripts\">http://seekingalpha.com/symbol/AAPL/earnings/transcripts</a>) "
@@ -39,7 +40,7 @@ public class SeekingAlphaDownloaderTab extends GridLayout {
 				EarningsCallView.class), 0, 0);
 
 		addComponent(new TabPartGridInput<EarningsCallView>("Collect http://seekingalpha.com/ data",
-				(e) -> seekingAlphaDownloadService.collectEarningsCallsFor((String) e[0]),
+				(e) -> seekingAlphaDownloadService.collectEarningsCalls(new EarningsCallCollectFilter((String) e[0])),
 				"<p>Downloads the earnings call transcripts for the <b>Trading Symbol</b></p>" + "<p>Visits url, like: "
 						+ "<a href=\"http://seekingalpha.com/symbol/AAPL/earnings/transcripts\">http://seekingalpha.com/symbol/AAPL/earnings/transcripts</a> "
 						+ "and collects all the transcripts from the links presented there</p>"
@@ -49,18 +50,18 @@ public class SeekingAlphaDownloaderTab extends GridLayout {
 
 		addComponent(
 				new TabPartGridInput<EarningsCallView>("Collect http://seekingalpha.com/ data",
-						(e) -> seekingAlphaDownloadService.collectLastNTranscripts((Integer) e[0]),
+						(e) -> seekingAlphaDownloadService.collectEarningsCalls(new EarningsCallCollectFilter((Integer) e[0])),
 						"<p>Downloads the <b>'N' freshest</b> earnings call transcripts based on <b>US.tls</b> file</p>"
 								+ "<p>Visits all the ticker's url (e.g.: "
 								+ "<a href=\"http://seekingalpha.com/symbol/AAPL/earnings/transcripts\">http://seekingalpha.com/symbol/AAPL/earnings/transcripts</a>) "
 								+ "and collects the top N transcripts from the links presented there</p>"
 								+ "<p>The data will be saved to <b>earnings_call</b> mongo collection</p>",
 						EarningsCallView.class,
-						Lists.newArrayList(new InputBlock<String>("Number of fresh transcripts: ", String.class))),
+						Lists.newArrayList(new InputBlock<Integer>("Number of fresh transcripts: ", Integer.class))),
 				2, 0);
 
 		addComponent(new TabPartGridInput<EarningsCallView>("Collect http://seekingalpha.com/ data",
-				(e) -> seekingAlphaDownloadService.collectLastNTranscriptsFor((Integer) e[0], (String) e[1]),
+				(e) -> seekingAlphaDownloadService.collectEarningsCalls(new EarningsCallCollectFilter((String) e[1], (Integer) e[0])),
 				"<p>Downloads the <b>'N' freshest</b> earnings call transcripts for the <b>Trading Symbol</b></p>"
 						+ "<p>Visits url, like: "
 						+ "<a href=\"http://seekingalpha.com/symbol/AAPL/earnings/transcripts\">http://seekingalpha.com/symbol/AAPL/earnings/transcripts</a>) "

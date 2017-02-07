@@ -6,12 +6,10 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import hu.farago.repo.model.entity.mongo.embedded.HTone;
-import hu.farago.repo.model.entity.mongo.embedded.StockData;
 import hu.farago.repo.model.entity.mongo.embedded.Tone;
 
 @Document(collection = "earnings_call")
@@ -23,6 +21,7 @@ public class EarningsCall implements Serializable {
 	public BigInteger id;
 	public String tradingSymbol;
 	public String rawText;
+	public DateTime zacksEarningsCallDate;
 	public DateTime publishDate;
 	public String url;
 	public List<String> words;
@@ -40,7 +39,13 @@ public class EarningsCall implements Serializable {
 	@Field("q_and_a_h_tone")
 	public HTone qAndAHTone;
 	
-	public List<StockData> stockData;
+	@Field("date_number")
+	public long dateNumber;
+	@Field("time_number")
+	public long timeNumber;
+	
+	public int wordSize;
+	public int q_and_a_wordSize;
 	
 	public double sumOfSharesOwnedBeforePublishDate;
 	public double sumOfBuyTransactionShares;

@@ -12,14 +12,14 @@ import hu.farago.repo.model.entity.mongo.EarningsCall;
 
 public class SeekingAlphaDownloaderTopNTest extends AbstractRootTest {
 
-	private static final String AAPL = "MU";
+	private static final String AAPL = "AAPL";
 	
 	@Autowired
 	private SeekingAlphaDownloader downloader;
 	
 	@Test
 	public void testCollectLatestNForIndex() throws Exception {
-		List<EarningsCall> calls = downloader.collectLatestNForIndex(new ProcessFirstNArticleParameter(AAPL, 4));
+		List<EarningsCall> calls = downloader.collectLatestNForIndex(new EarningsCallCollectFilter(AAPL, 4));
 		
 		assertEquals(4, calls.size());
 	}

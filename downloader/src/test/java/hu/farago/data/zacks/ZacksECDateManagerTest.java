@@ -1,21 +1,8 @@
 package hu.farago.data.zacks;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertNotNull;
-
-import hu.farago.data.AbstractRootTest;
-import hu.farago.data.seekingalpha.ProcessFirstNArticleParameter;
-import hu.farago.data.seekingalpha.SeekingAlphaDownloader;
-import hu.farago.data.zacks.ZacksECDateManager.ManagerParameterObject;
-import hu.farago.repo.model.dao.mongo.ZacksEarningsCallDatesRepository;
-import hu.farago.repo.model.entity.mongo.EarningsCall;
-import hu.farago.repo.model.entity.mongo.ZacksEarningsCallDates;
-
-import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -28,8 +15,12 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import hu.farago.data.AbstractRootTest;
+import hu.farago.data.seekingalpha.EarningsCallCollectFilter;
+import hu.farago.data.seekingalpha.SeekingAlphaDownloader;
+import hu.farago.data.zacks.ZacksECDateManager.ManagerParameterObject;
+import hu.farago.repo.model.dao.mongo.ZacksEarningsCallDatesRepository;
+import hu.farago.repo.model.entity.mongo.EarningsCall;
 
 public class ZacksECDateManagerTest extends AbstractRootTest {
 	
@@ -89,15 +80,6 @@ public class ZacksECDateManagerTest extends AbstractRootTest {
 		manager.addDate(sample); // add the same!
 		
 		assertThat(repository.count(), equalTo(1L));
-		
-		ZacksEarningsCallDates ret = repository.findAll().get(0);
-		assertThat(ret.seekingAlphaCheckDate, hasSize(4));
-		assertThat(ret.seekingAlphaCheckDate, contains(
-				createInSystem(2016, 1, 5),
-				createInSystem(2016, 1, 6),
-				createInSystem(2016, 1, 7),
-				createInSystem(2016, 1, 8)));
-		
 	}
 	
 	@Test
@@ -118,22 +100,6 @@ public class ZacksECDateManagerTest extends AbstractRootTest {
 		manager.overrideDate(updatedSample); // refreshed current report
 		
 		assertThat(repository.count(), equalTo(2L));
-		
-		List<ZacksEarningsCallDates> list = repository.findAll();
-		DateTime maxDate = list.stream().map(u -> u.nextReportDate).max(DateTime::compareTo).get();
-		ZacksEarningsCallDates ret = Iterables.find(list, new Predicate<ZacksEarningsCallDates>() {
-			@Override
-			public boolean apply(ZacksEarningsCallDates input) {
-				return input.nextReportDate.equals(maxDate);
-			}
-		});
-		
-		assertThat(ret.seekingAlphaCheckDate, hasSize(4));
-		assertThat(ret.seekingAlphaCheckDate, contains(
-				createInSystem(2016, 1, 7),
-				createInSystem(2016, 1, 8),
-				createInSystem(2016, 1, 9),
-				createInSystem(2016, 1, 10)));
 	}
 
 	@Test
@@ -149,7 +115,7 @@ public class ZacksECDateManagerTest extends AbstractRootTest {
 
 	@Test
 	public void testCollectLatestForIndex() throws Exception {
-		EarningsCall call = downloader.collectLatestForIndex(new ProcessFirstNArticleParameter(AAPL));
+		EarningsCall call = downloader.collectLatestForIndex(new EarningsCallCollectFilter(AAPL));
 		
 		assertNotNull(call);
 	}
