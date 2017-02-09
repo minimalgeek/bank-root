@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import hu.farago.data.AbstractRootTest;
 import hu.farago.repo.model.entity.mongo.EarningsCall;
 
-//@Ignore("It is very time consuming")
+@Ignore("It is very time consuming")
 public class SeekingAlphaDownloaderTest extends AbstractRootTest {
 	
 	private static final String AAPL = "AAPL";

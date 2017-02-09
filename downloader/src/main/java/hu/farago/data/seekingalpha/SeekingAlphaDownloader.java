@@ -37,9 +37,8 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 	public static final String COPYRIGHT_POLICY = "(?i)copyright policy";
 	public static final String EARNINGS_CALL_TRANSCRIPT = "earnings call transcript";
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(SeekingAlphaDownloader.class);
-		
+	private static final Logger LOGGER = LoggerFactory.getLogger(SeekingAlphaDownloader.class);
+
 	@Value("${seekingalpha.filePath}")
 	private String filePath;
 	@Value("${seekingalpha.articleUrlBase}")
@@ -48,86 +47,96 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 	private String urlBase;
 	@Value("${seekingalpha.urlMiddle}")
 	private String urlMiddle;
-	
+	@Value("${seekingalpha.delay}")
+	private Integer delay;
+
 	@Autowired
 	private WordProcessor simpleWordProcessor;
-	
+
 	@Autowired
 	private ToneCalculator toneCalculator;
-	
+
 	@Autowired
 	private AutomaticServiceErrorUtils aseu;
-	
+
 	@PostConstruct
 	private void readFile() {
 		readFileFromPathAndFillIndexes(filePath);
 	}
-	
+
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
 	}
 
-	// http://seekingalpha.com/symbol/AAPL/transcripts/1
+	// http://seekingalpha.com/symbol/ACXM/earnings/more_transcripts?page=1
 	@Override
 	protected String buildUrl(String index, int pageIndex) {
 		StringBuilder builder = new StringBuilder(urlBase);
 		builder.append(index);
 		builder.append(urlMiddle);
-		//builder.append(pageIndex); // the changed the page
+		builder.append(pageIndex);
 		return builder.toString();
 	}
 
 	@Override
 	protected boolean notLastPage(String siteContent) {
-		return siteContent.contains("\">Next Page</a>");
+		return !siteContent.contains("\"count\":0");
 	}
 
 	@Override
 	protected List<EarningsCall> processDocument(String index, Document document) {
-		
+
 		List<EarningsCall> ret = Lists.newArrayList();
-		
-		Element container = document.getElementById("portfolo_selections");
-		Elements articles = container.getElementsByTag("a");
-		
-		for (Element earningsCallArticle : articles) {
-			if (elementIsLegalTranscript(earningsCallArticle)) {
-				try {
-					EarningsCall call = createEarningsCall(earningsCallArticle, index);
-					
-					if (call.words.size() > 200) {
-						// it is probably a real earnings call, not only a link to some audio shit
-						processTone(call);
-						retrieveRelevantQAndAPartAndProcessTone(call);
+
+		Elements htmlData = extractHtmlData(document);
+		try {
+			for (Element earningsCallArticle : htmlData) {
+				if (elementIsLegalTranscript(earningsCallArticle)) {
+					try {
+						EarningsCall call = createEarningsCall(earningsCallArticle, index);
+
+						if (call.words.size() > 200) {
+							// it is probably a real earnings call, not only a
+							// link to some audio shit
+							processTone(call);
+							retrieveRelevantQAndAPartAndProcessTone(call);
+						}
+
+						ret.add(call);
+					} catch (Exception e) {
+						LOGGER.error("Failed to process: (" + earningsCallArticle + ")", e);
+						aseu.saveError(AutomaticService.SEEKING_ALPHA, e.getMessage());
 					}
-					
-					ret.add(call);
-					Thread.sleep(2000);
-				} catch (Exception e) {
-					LOGGER.error("Failed to process: (" + earningsCallArticle.text() + ")", e);
-					aseu.saveError(AutomaticService.SEEKING_ALPHA, e.getMessage());
 				}
 			}
+		} catch (Exception e) {
+			LOGGER.error("Failed to process the index JSON for: (" + index + ")", e);
+			aseu.saveError(AutomaticService.SEEKING_ALPHA, e.getMessage());
 		}
-		
+
 		return ret;
 	}
-	
+
+	private Elements extractHtmlData(Document document) {
+		Element container = document.getElementsByTag("body").first();
+		return container.children();
+	}
+
 	public EarningsCall collectLatestForIndex(EarningsCallCollectFilter parameterObject) throws Exception {
 		parameterObject.count = 1;
 		List<EarningsCall> lst = collectLatestNForIndex(parameterObject);
 		return CollectionUtils.isEmpty(lst) ? null : lst.get(0);
 	}
-	
+
 	public List<EarningsCall> collectLatestNForIndex(EarningsCallCollectFilter parameterObject) throws Exception {
 		LOGGER.info("Collect latest for index: " + parameterObject.index);
 		String urlStr = buildUrl(parameterObject.index, 0);
 		String siteContent = URLUtils.getHTMLContentOfURL(urlStr);
 		Document document = Jsoup.parse(siteContent);
-		
+
 		parameterObject.document = document;
-		
+
 		return processFirstNArticle(parameterObject);
 	}
 
@@ -137,34 +146,34 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 	}
 
 	private boolean elementIsLegalTranscript(Element earningsCallArticle) {
-		boolean isQP = earningsCallArticle.hasAttr("sasource") && validSASource(earningsCallArticle.attr("sasource"));
+		// boolean isQP = earningsCallArticle.hasAttr("sasource") &&
+		// validSASource(earningsCallArticle.attr("sasource"));
 		String linkText = earningsCallArticle.text();
-		boolean isTranscript = linkText.toLowerCase().contains(EARNINGS_CALL_TRANSCRIPT);
-		return isQP && isTranscript;
+		return linkText.toLowerCase().contains(EARNINGS_CALL_TRANSCRIPT);
 	}
-	
-	private boolean validSASource(String src) {
-		return StringUtils.equals(src, "qp_analysis") || StringUtils.equals(src, "qp_transcripts");
-	}
-	
-	private EarningsCall createEarningsCall(Element dataRow, String index)
-			throws Exception {
-		
+
+	// private boolean validSASource(String src) {
+	// return StringUtils.equals(src, "qp_analysis") || StringUtils.equals(src,
+	// "qp_transcripts");
+	// }
+
+	private EarningsCall createEarningsCall(Element dataRow, String index) throws Exception {
+
 		// built in slowdown because of HTTP 429
 		try {
-		    TimeUnit.MILLISECONDS.sleep(2000 + (long)(Math.random()*2000));
+			TimeUnit.MILLISECONDS.sleep(delay + (long) (Math.random() * 4000));
 		} catch (InterruptedException e) {
-		    LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		}
-		
-		String href = dataRow.attr("href");
+
+		String href = dataRow.getElementsByTag("a").get(1).attr("href").replaceAll("\\\\\"", "");
 		String articleUrl = articleUrlBase + href;
 		LOGGER.info("Processing: " + articleUrl);
-		
+
 		String articleHTMLContent = URLUtils.getHTMLContentOfURL(articleUrl);
 		Document doc = Jsoup.parse(articleHTMLContent);
 		String articleBody = URLUtils.getContentOfHTMLContent(doc.getElementById("a-body").text());
-		
+
 		EarningsCall data = new EarningsCall();
 		data.url = articleUrl;
 		data.tradingSymbol = index;
@@ -176,7 +185,7 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 			}
 		}
 		data.words = simpleWordProcessor.parseArticlePlainTextAndBuildMapOfWords(data.rawText);
-		
+
 		return data;
 	}
 
@@ -186,62 +195,71 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 			processQAndA(earningsCall, qAndAParts);
 			return;
 		}
-		
+
 		qAndAParts = earningsCall.rawText.split(QUESTION_AND_ANSWER_2);
 		if (qAndAParts.length >= 2) {
 			processQAndA(earningsCall, qAndAParts);
 			return;
 		}
-		
+
 	}
-	
+
 	private List<EarningsCall> processFirstNArticle(EarningsCallCollectFilter parameterObject) {
-		Element container = parameterObject.document.getElementById("portfolo_selections");
-		Elements articles = container.getElementsByTag("a");
-		
 		int processed = 0;
 		List<EarningsCall> processedCalls = new ArrayList<>();
 		
-		for (Element earningsCallArticle : articles) {
-			if (elementIsLegalTranscript(earningsCallArticle)) {
-				try {
-					EarningsCall call = createEarningsCall(earningsCallArticle, parameterObject.index);
-					
-					if (call.words.size() > 200) {
-						// it is probably a real earnings call, not only a link to some audio shit
-						processTone(call);
-						retrieveRelevantQAndAPartAndProcessTone(call);
-						processedCalls.add(call);
-						processed++;
+		Elements htmlData = extractHtmlData(parameterObject.document);
+		try {
+			for (Element earningsCallArticle : htmlData) {
+				if (elementIsLegalTranscript(earningsCallArticle)) {
+					try {
+						EarningsCall call = createEarningsCall(earningsCallArticle, parameterObject.index);
+
+						if (call.words.size() > 200) {
+							// it is probably a real earnings call, not only a
+							// link to some audio shit
+							processTone(call);
+							retrieveRelevantQAndAPartAndProcessTone(call);
+							processedCalls.add(call);
+							processed++;
+						}
+					} catch (Exception e) {
+						LOGGER.error("Failed to process: (" + earningsCallArticle + ")", e);
+						aseu.saveError(AutomaticService.SEEKING_ALPHA, e.getMessage());
 					}
-				} catch (Exception e) {
-					LOGGER.error("Failed to process: (" + earningsCallArticle.text() + ")", e);
-					aseu.saveError(AutomaticService.SEEKING_ALPHA, e.getMessage());
+				}
+
+				if (parameterObject.count > 0 && processed == parameterObject.count) {
+					return processedCalls;
 				}
 			}
-			
-			if (parameterObject.count > 0 && processed == parameterObject.count) {
-				return processedCalls;
-			}
+		} catch (Exception e) {
+			LOGGER.error("Failed to process the index JSON for: (" + parameterObject.index + ")", e);
+			aseu.saveError(AutomaticService.SEEKING_ALPHA, e.getMessage());
 		}
-		
+
 		return processedCalls;
 	}
+
+//	private ArrayList<String> getArticleList(String htmlData) throws IOException, SAXException, TikaException {
+//		return Lists.newArrayList(URLUtils.getContentOfHTMLContent(htmlData).split("<li>"));
+//	}
 
 	private void processQAndA(EarningsCall earningsCall, String[] qAndAParts) {
 		String qAndA = qAndAParts[qAndAParts.length - 1];
 		qAndA = qAndA.split(COPYRIGHT_POLICY)[0];
-		
+
 		earningsCall.qAndAText = qAndA;
 		earningsCall.qAndAWords = simpleWordProcessor.parseArticlePlainTextAndBuildMapOfWords(earningsCall.qAndAText);
-		
+
 		if (earningsCall.qAndAWords.size() > 50) {
-			// it is probably a real earnings call, not only a link to some audio shit
+			// it is probably a real earnings call, not only a link to some
+			// audio shit
 			earningsCall.qAndATone = toneCalculator.getToneOf(earningsCall.qAndAWords);
 			earningsCall.qAndAHTone = toneCalculator.getHToneOf(earningsCall.qAndAWords);
 		}
 	}
-	
+
 	private DateTime parseDate(Element dateTime) {
 		try {
 			return DateTimeUtils.parseToYYYYMMDD_HHmmss_ZONE_UTC(dateTime.attr("datetime"));

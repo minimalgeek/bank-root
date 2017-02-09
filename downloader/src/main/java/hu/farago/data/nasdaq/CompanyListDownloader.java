@@ -31,7 +31,7 @@ public class CompanyListDownloader {
 		String url = nasdaqCompaniesUrlBase + exchange.getName() + nasdaqCompaniesUrlEnd;
 		LOGGER.info("Downloading companies from: " + url);
 		
-		String content = URLUtils.getHTMLContentOfURL(url);
+		String content = URLUtils.getHTMLContentOfURL_OLD(url);
 		String lines[] = content.split("\\r?\\n");
 		
 		List<String> ret = Lists.newArrayList();
