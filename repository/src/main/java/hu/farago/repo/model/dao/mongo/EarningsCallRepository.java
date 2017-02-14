@@ -18,4 +18,8 @@ public interface EarningsCallRepository extends MongoRepository<EarningsCall, Bi
 	
 	Long deleteByUrl(String url);
 	
+	Long countByTradingSymbol(String tradingSymbol);
+	
+	List<EarningsCall> deleteByTradingSymbol(String tradingSymbol);
+	
 }

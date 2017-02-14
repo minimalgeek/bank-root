@@ -26,32 +26,41 @@ public abstract class DataDownloader<T> {
 	protected List<String> indexes;
 
 	protected abstract Logger getLogger();
-	protected abstract String buildUrl(String index, int pageIndex);
-	protected abstract boolean notLastPage(String siteContent);
-	protected abstract List<T> processDocument(String index, Document document);
-	
-	public void clean() {
-		
-	}
-	
-	public Map<String, List<T>> parseAll(int pageIdx)
-			throws Exception {
 
-		Map<String, List<T>> insiderList = Maps.newHashMap();
+	protected abstract String buildUrl(String index, int pageIndex);
+
+	protected abstract boolean notLastPage(String siteContent);
+
+	protected abstract List<T> processDocument(String index, Document document);
+
+	public void clean() {
+
+	}
+
+	protected boolean shouldBeSkipped(String index) {
+		return false;
+	}
+
+	public Map<String, List<T>> parseAll(int pageIdx) throws Exception {
+
+		Map<String, List<T>> indexToDataMap = Maps.newHashMap();
 
 		for (int i = pageIdx * PAGE_SIZE; i < (pageIdx + 1) * PAGE_SIZE && i < indexes.size(); i++) {
+			getLogger().info("Processing page " + i);
 			String index = indexes.get(i);
-			try {
-				insiderList.put(index, collectAllDataForIndex(index));
-				getLogger().info(index + " processed");
-			} catch (Exception e) {
-				getLogger().error(e.getMessage(), e);
+			if (!shouldBeSkipped(index)) {
+				try {
+					indexToDataMap.put(index, collectAllDataForIndex(index));
+					getLogger().info(index + " processed");
+				} catch (Exception e) {
+					getLogger().error(e.getMessage(), e);
+				}
 			}
 		}
 
-		return insiderList;
+		return indexToDataMap;
 	}
-	
+
 	public int pages() {
 		if (indexes.size() % PAGE_SIZE == 0) {
 			return (int) (indexes.size() / PAGE_SIZE);
@@ -59,11 +68,11 @@ public abstract class DataDownloader<T> {
 			return (int) (indexes.size() / PAGE_SIZE) + 1;
 		}
 	}
-	
+
 	public List<String> getIndexes() {
 		return indexes;
 	}
-	
+
 	protected double tryToParseDouble(DecimalFormat format, String text) {
 		try {
 			return format.parse(text).doubleValue();
@@ -72,7 +81,7 @@ public abstract class DataDownloader<T> {
 			return 0.0;
 		}
 	}
-	
+
 	protected void readFileFromPathAndFillIndexes(String path) {
 		File file = new File(path);
 
@@ -101,5 +110,4 @@ public abstract class DataDownloader<T> {
 		return dataList;
 	}
 
-	
 }

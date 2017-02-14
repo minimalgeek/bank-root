@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
@@ -37,6 +38,8 @@ public class SeekingAlphaDownloadService {
 	private ZacksECDateManager manager;
 	@Autowired
 	private AutomaticServiceErrorUtils aseu;
+	@Value("${seekingalpha.lookForTranscriptsShouldRun}")
+	private boolean lookForTranscriptsShouldRun;
 
 	public List<EarningsCallView> collectEarningsCalls(EarningsCallCollectFilter parameterObject) {
 		LOGGER.info("collectEarningsCalls");
@@ -54,7 +57,7 @@ public class SeekingAlphaDownloadService {
 
 		List<EarningsCallView> ret = Lists.newArrayList();
 		try {
-			earningsCallRepository.deleteAll();
+			//earningsCallRepository.deleteAll();
 			for (int i = 0; i < seekingAlphaDownloader.pages(); i++) {
 				Map<String, List<EarningsCall>> map = seekingAlphaDownloader.parseAll(i);
 
@@ -124,14 +127,16 @@ public class SeekingAlphaDownloadService {
 	}
 
 	// runs every day at 15:00 in eastern american timezone
-	@Scheduled(cron = "0 0 15 * * ?", zone="America/New_York")
+	@Scheduled(cron = "0 0 15 * * ?", zone = "America/New_York")
 	// runs every day at 14:30 in eastern american timezone
-	@Scheduled(cron = "0 30 14 * * ?", zone="America/New_York")
+	@Scheduled(cron = "0 30 14 * * ?", zone = "America/New_York")
 	public void lookForTranscriptsScheduled() {
-		try {
-			lookForTranscripts();
-		} catch (Exception e) {
-			aseu.saveError(AutomaticService.SEEKING_ALPHA, e.getMessage());
+		if (lookForTranscriptsShouldRun) {
+			try {
+				lookForTranscripts();
+			} catch (Exception e) {
+				aseu.saveError(AutomaticService.SEEKING_ALPHA, e.getMessage());
+			}
 		}
 	}
 

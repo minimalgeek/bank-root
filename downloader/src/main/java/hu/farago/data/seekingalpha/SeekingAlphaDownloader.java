@@ -25,6 +25,7 @@ import hu.farago.data.api.DataDownloader;
 import hu.farago.data.api.WordProcessor;
 import hu.farago.data.utils.AutomaticServiceErrorUtils;
 import hu.farago.data.utils.URLUtils;
+import hu.farago.repo.model.dao.mongo.EarningsCallRepository;
 import hu.farago.repo.model.entity.mongo.AutomaticServiceError.AutomaticService;
 import hu.farago.repo.model.entity.mongo.EarningsCall;
 import hu.farago.repo.utils.DateTimeUtils;
@@ -36,6 +37,7 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 	public static final String QUESTION_AND_ANSWER_2 = "(?i)question and answer";
 	public static final String COPYRIGHT_POLICY = "(?i)copyright policy";
 	public static final String EARNINGS_CALL_TRANSCRIPT = "earnings call transcript";
+	private static final Integer IMPORT_TRESHOLD = 3;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SeekingAlphaDownloader.class);
 
@@ -58,6 +60,9 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 
 	@Autowired
 	private AutomaticServiceErrorUtils aseu;
+	
+	@Autowired
+	private EarningsCallRepository ecr;
 
 	@PostConstruct
 	private void readFile() {
@@ -67,6 +72,11 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
+	}
+	
+	@Override
+	protected boolean shouldBeSkipped(String index) {
+		return ecr.countByTradingSymbol(index) > IMPORT_TRESHOLD;
 	}
 
 	// http://seekingalpha.com/symbol/ACXM/earnings/more_transcripts?page=1
@@ -87,6 +97,15 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 	@Override
 	protected List<EarningsCall> processDocument(String index, Document document) {
 
+		// built in slowdown because of HTTP 429
+		try {
+			TimeUnit.MILLISECONDS.sleep(delay + (long) (Math.random() * 4000));
+		} catch (InterruptedException e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+		
+		ecr.deleteByTradingSymbol(index);
+
 		List<EarningsCall> ret = Lists.newArrayList();
 
 		Elements htmlData = extractHtmlData(document);
@@ -94,6 +113,9 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 			for (Element earningsCallArticle : htmlData) {
 				if (elementIsLegalTranscript(earningsCallArticle)) {
 					try {
+						// built in slowdown because of HTTP 429
+						TimeUnit.MILLISECONDS.sleep(delay + (long) (Math.random() * 4000));
+
 						EarningsCall call = createEarningsCall(earningsCallArticle, index);
 
 						if (call.words.size() > 200) {
@@ -159,13 +181,6 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 
 	private EarningsCall createEarningsCall(Element dataRow, String index) throws Exception {
 
-		// built in slowdown because of HTTP 429
-		try {
-			TimeUnit.MILLISECONDS.sleep(delay + (long) (Math.random() * 4000));
-		} catch (InterruptedException e) {
-			LOGGER.error(e.getMessage(), e);
-		}
-
 		String href = dataRow.getElementsByTag("a").get(1).attr("href").replaceAll("\\\\\"", "");
 		String articleUrl = articleUrlBase + href;
 		LOGGER.info("Processing: " + articleUrl);
@@ -207,7 +222,7 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 	private List<EarningsCall> processFirstNArticle(EarningsCallCollectFilter parameterObject) {
 		int processed = 0;
 		List<EarningsCall> processedCalls = new ArrayList<>();
-		
+
 		Elements htmlData = extractHtmlData(parameterObject.document);
 		try {
 			for (Element earningsCallArticle : htmlData) {
@@ -241,9 +256,11 @@ public class SeekingAlphaDownloader extends DataDownloader<EarningsCall> {
 		return processedCalls;
 	}
 
-//	private ArrayList<String> getArticleList(String htmlData) throws IOException, SAXException, TikaException {
-//		return Lists.newArrayList(URLUtils.getContentOfHTMLContent(htmlData).split("<li>"));
-//	}
+	// private ArrayList<String> getArticleList(String htmlData) throws
+	// IOException, SAXException, TikaException {
+	// return
+	// Lists.newArrayList(URLUtils.getContentOfHTMLContent(htmlData).split("<li>"));
+	// }
 
 	private void processQAndA(EarningsCall earningsCall, String[] qAndAParts) {
 		String qAndA = qAndAParts[qAndAParts.length - 1];
